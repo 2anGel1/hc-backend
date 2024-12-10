@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Staff {
+  division   Division @relation(fields: [divisionId], references: [id])
+  id         String   @id @default(cuid())
+  pseudo     String
+  names      String
+  role       String
+  divisionId Int
+}
+
+model Division {
+  id     Int     @id @default(autoincrement())
+  pseudo String
+  label  String
+  staffs Staff[]
+}
