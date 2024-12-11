@@ -19,13 +19,9 @@ router.get("/generate-all", async (req: Request, res: Response) => {
 
     try {
         // Generate QR codes for all staff members
-        const staffMembers = await StaffModel.findMany({
-            include: {
-                division: true
-            }
-        });
+        const staffMembers = await StaffModel.findMany();
         for (const member of staffMembers) {
-            const qrName = member.names + "_" + member.division.label + "_" + member.role + "_" + member.id + ".png";
+            const qrName = member.names + "_" + member.pole + "_" + member.role + "_" + member.id + ".png";
             const qrPath = path.join(qrDir, qrName);
             await QRCode.toFile(qrPath, member.id);
         }

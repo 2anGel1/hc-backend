@@ -23,9 +23,13 @@
     "express": "^4.21.2",
     "multer": "^1.4.5-lts.1",
     "prisma": "^6.0.1",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
     "@types/archiver": "^6.0.3",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
@@ -34,10 +38,14 @@
     "@types/node": "^22.10.1",
     "@types/qrcode": "^1.5.5",
     "autoprefixer": "^10.4.20",
+    "babel-loader": "^9.2.1",
     "nodemon": "^3.1.7",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }

@@ -8,17 +8,25 @@ datasource db {
 }
 
 model Staff {
-  division   Division @relation(fields: [divisionId], references: [id])
-  id         String   @id @default(cuid())
-  pseudo     String
-  names      String
-  role       String
-  divisionId Int
+  id     String      @id @default(cuid())
+  pseudo String
+  names  String
+  role   String
+  pole   String
+  areas  StaffArea[]
 }
 
-model Division {
-  id     Int     @id @default(autoincrement())
-  pseudo String
-  label  String
-  staffs Staff[]
+model Area {
+  id    Int         @id @default(autoincrement())
+  label String
+  staff StaffArea[]
+}
+
+model StaffArea {
+  staffId String
+  areaId  Int
+  staff   Staff  @relation(fields: [staffId], references: [id])
+  area    Area   @relation(fields: [areaId], references: [id])
+
+  @@id([staffId, areaId])
 }

@@ -2,6 +2,7 @@ const apiUrl = {
     deleteAllStaff: '/api/admin/staff/delete-all',
     uploadStaffExcel: '/api/admin/excel/staff',
     allStaff: '/api/admin/staff/get-all',
+    addStaff: '/api/admin/staff/add',
 };
 
 document.querySelector('#uploadStaffForm').addEventListener('submit', function (event) {
@@ -43,36 +44,74 @@ document.querySelector('#confirmModalButton').addEventListener('click', function
 
     const confirmModal = document.getElementById("modal-dialog").classList.add('hidden');
 
-        const loader = document.getElementById('emptyStaffLoader');
+    const loader = document.getElementById('emptyStaffLoader');
 
-        loader.classList.remove('hidden');
+    loader.classList.remove('hidden');
 
-        const action = apiUrl.deleteAllStaff;
+    const action = apiUrl.deleteAllStaff;
 
-        fetch(action, {
-            method: 'DELETE',
+    fetch(action, {
+        method: 'DELETE',
+    })
+        .then(response => {
+
+            if (response.ok) {
+                alert('Liste vidée avec succès');
+                window.location.reload(true);
+            } else {
+                alert('Erreur lors de la suppression.');
+            }
+
         })
-            .then(response => {
-
-                if (response.ok) {
-                    alert('Liste vidée avec succès');
-                    window.location.reload(true);
-                } else {
-                    alert('Erreur lors de la suppression.');
-                }
-
-            })
-            .catch(error => {
-                loader.classList.add('hidden');
-                alert('Une erreur est survenue : ' + error.message);
-            })
-            .finally(() => {
-                loader.classList.add('hidden');
-            });
+        .catch(error => {
+            loader.classList.add('hidden');
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            loader.classList.add('hidden');
+        });
 
 });
 
-// Fonction pour récupérer les données
+document.querySelector('#addStaffForm').addEventListener('submit', function (event) {
+
+    event.preventDefault();
+
+    const loader = document.getElementById('addStaffLoader');
+
+    loader.classList.remove('hidden');
+
+    const formData = new FormData(this);
+    const action = apiUrl.addStaff;
+
+    const data = Object.fromEntries(formData.entries());
+    console.log('Données en objet:', data);
+
+    fetch(action, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        method: 'POST',
+    })
+        .then(response => {
+
+            if (response.ok) {
+                alert("Membre ajouté avec succès !");
+                window.location.reload(true);
+            } else {
+                alert("Erreur lors de l'ajout");
+            }
+
+        })
+        .catch(error => {
+            loader.classList.add('hidden');
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            loader.classList.add('hidden');
+        });
+
+});
+
 async function fetchStaffData() {
 
     const tableLoader = document.getElementById('loader-table');
@@ -100,7 +139,6 @@ async function fetchStaffData() {
         });
 }
 
-// Fonction pour remplir le tableau
 function populateTable(staffList) {
     const tableBody = document.querySelector('#staffTable tbody');
     tableBody.innerHTML = ''; // Vide le tableau avant de le remplir
@@ -113,7 +151,7 @@ function populateTable(staffList) {
             <td class="px-4 py-2 border-b">${num}</td>
             <td class="px-4 py-2 border-b">${staff.id}</td>
             <td class="px-4 py-2 border-b">${staff.names}</td>
-            <td class="px-4 py-2 border-b">${staff.division.label}</td>
+            <td class="px-4 py-2 border-b">${staff.pole}</td>
             <td class="px-4 py-2 border-b">${staff.role}</td>
         `;
         tableBody.appendChild(row);
@@ -139,7 +177,6 @@ function populateTable(staffList) {
             }
         }
     });
-    $('.dataTables_filter input').addClass('mb-2');
 
 }
 

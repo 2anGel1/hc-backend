@@ -20,10 +20,13 @@
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                             <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
-                                aria-current="page">Staff</a>
-                            <a href="#"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Divisions
-                                (Pôles)</a>
+                                aria-current="page">
+                                Membres du staff
+                            </a>
+                            <a href="/zone.html"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Zones d'accès
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -34,7 +37,7 @@
     <header class="bg-white shadow">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-                Gestion du Staff
+                Gestion des membres du staff
             </h1>
         </div>
     </header>
@@ -78,41 +81,40 @@
                         Ajouter un membre
                     </h2>
 
-                    <form>
+                    <form id="addStaffForm" method="POST">
                         <div class="space-y-12">
 
                             <div class="border-b border-gray-900/10 pb-12">
                                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                                     <div class="sm:col-span-3">
-                                        <label for="first-name" class="block text-sm/6 font-medium text-gray-900">
+                                        <label for="names" class="block text-sm/6 font-medium text-gray-900">
                                             Nom et Prénoms</label>
                                         <div class="mt-2">
-                                            <input type="text" name="first-name" id="first-name"
-                                                autocomplete="given-name"
+                                            <input type="text" name="names" id="names" autocomplete="given-name"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                                         </div>
                                     </div>
 
                                     <div class="sm:col-span-3">
-                                        <label for="last-name" class="block text-sm/6 font-medium text-gray-900">
+                                        <label for="role" class="block text-sm/6 font-medium text-gray-900">
                                             Fonction</label>
                                         <div class="mt-2">
-                                            <input type="text" name="last-name" id="last-name"
-                                                autocomplete="family-name"
+                                            <input type="text" name="role" id="role" autocomplete="family-name"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                                         </div>
                                     </div>
 
                                     <div class="sm:col-span-6">
-                                        <label for="country" class="block text-sm/6 font-medium text-gray-900">Direction
-                                            ou
-                                            Pôle</label>
+                                        <label for="country"
+                                            class="block text-sm/6 font-medium text-gray-900">Pôle</label>
                                         <div class="mt-2 grid grid-cols-1">
-                                            <select id="country" name="country" autocomplete="country-name"
+                                            <select id="country" name="pole" autocomplete="country-name"
                                                 class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                                                <option>United States</option>
-                                                <option>Canada</option>
-                                                <option>Mexico</option>
+                                                <option value="Division_1">Division_1</option>
+                                                <option value="Division_2">Division_2</option>
+                                                <option value="Division_3">Division_3</option>
+                                                <option value="Division_4">Division_4</option>
+                                                <option value="Division_5">Division_5</option>
                                             </select>
                                             <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                                                 viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
@@ -129,10 +131,22 @@
                         </div>
 
                         <div class="mt-6 flex items-center justify-end gap-x-6">
-                            <button type="submit"
-                                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                Enregistrer
-                            </button>
+                            <span class="sm:ml-3">
+                                <button type="submit" id="addStaffButton"
+                                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    <svg id="addStaffLoader" aria-hidden="true" role="status"
+                                        class="inline w-4 h-4 me-3 text-white animate-spin hidden" viewBox="0 0 100 101"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                            fill="#E5E7EB" />
+                                        <path
+                                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                    Enregistrer
+                                </button>
+                            </span>
                         </div>
                     </form>
 
@@ -143,23 +157,33 @@
             <div class="w-full bg-white shadow-md rounded-lg p-6 mb-6">
                 <div class="w-full flex justify-between items-center border-b border-gray-900/10 mb-4 pb-5">
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
-                        Liste du Staff
+                        Liste des membres du staff
                     </h2>
 
-                    <button type="button" onclick="document.getElementById('modal-dialog').classList.remove('hidden')"
-                        class="uppercase inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-                        vider la liste
-                        <svg id="emptyStaffLoader" aria-hidden="true" role="status"
-                            class="inline w-4 h-4 ml-3 text-white animate-spin hidden" viewBox="0 0 100 101" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                fill="#E5E7EB" />
-                            <path
-                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                fill="currentColor" />
-                        </svg>
-                    </button>
+                    <div class="flex gap-4">
+                        <form id="downloadForm" enctype="multipart/form-data" method="GET"
+                            action="/api/qr/generate-all">
+                            <button type="submit"
+                                class="uppercase inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                Code QR
+                            </button>
+                        </form>
+                        <button type="button"
+                            onclick="document.getElementById('modal-dialog').classList.remove('hidden')"
+                            class="uppercase inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                            vider la liste
+                            <svg id="emptyStaffLoader" aria-hidden="true" role="status"
+                                class="inline w-4 h-4 ml-3 text-white animate-spin hidden" viewBox="0 0 100 101"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                    fill="#E5E7EB" />
+                                <path
+                                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <table id="staffTable" class="min-w-full m-2 bg-white border border-gray-300">
@@ -177,7 +201,6 @@
                 </table>
                 <p class="text-center hidden mt-4" id="loader-table">Chargement des données...</p>
             </div>
-
 
         </div>
 
@@ -228,7 +251,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="./js/staff.js"></script>
 
 </body>
 

@@ -1,6 +1,6 @@
-import { DivisionModel, StaffModel } from "../prisma";
-import { Division, Staff } from "../utils/interface";
 import { Request, Response } from "express";
+import { Staff } from "../utils/interface";
+import { AreaModel, StaffModel } from "../prisma";
 import csvParser from "csv-parser";
 import fs from "fs";
 
@@ -20,8 +20,8 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
             .on("data", async (row) => {
 
                 users.push({
-                    divisionLabel: row.division,
                     names: row.names,
+                    pole: row.pole,
                     role: row.role,
                 });
 
@@ -36,22 +36,14 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
                     });
 
                     if (!existingStaff) {
-                        const division = await DivisionModel.findFirst({
-                            where: {
-                                label: user.divisionLabel
+                        await StaffModel.create({
+                            data: {
+                                names: user.names,
+                                role: user.role,
+                                pole: user.pole,
+                                pseudo,
                             }
                         });
-
-                        if (division) {
-                            await StaffModel.create({
-                                data: {
-                                    divisionId: division.id,
-                                    names: user.names,
-                                    role: user.role,
-                                    pseudo,
-                                }
-                            })
-                        }
                     }
                 }
 
@@ -63,58 +55,11 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
     }
 };
 
-// Handle division file upload
-export const handleFileUploadDivision = async (req: Request, res: Response): Promise<void> => {
-    if (!req.file) {
-        res.status(400).json({ error: "No file uploaded!" });
-        return;
-    }
-
-    const filePath = req.file.path;
-    const divisions: Division[] = [];
-
-    try {
-        fs.createReadStream(filePath)
-            .pipe(csvParser())
-            .on("data", (row) => {
-                divisions.push({ label: row.label });
-            })
-            .on("end", async () => {
-
-                for (const division of divisions) {
-
-                    const pseudo = division.label.replace(" ", "").toLowerCase();
-                    const existingDivison = await DivisionModel.findFirst({
-                        where: { pseudo }
-                    });
-                    if (!existingDivison) {
-                        await DivisionModel.create({
-                            data: {
-                                label: division.label,
-                                pseudo
-                            }
-                        });
-                    }
-
-                }
-
-                fs.unlinkSync(filePath);
-                res.status(200).json({ message: "Data successfully added to the database!" });
-            });
-    } catch (error) {
-        res.status(500).json({ error: "Failed to process file!" });
-    }
-};
-
-// 
+//  STAFF
 export const getAllStaff = async (req: Request, res: Response): Promise<void> => {
     try {
-        const staffData = await StaffModel.findMany({
-            include: {
-                division: true
-            }
-        })
-        res.status(200).json(staffData); // Retourner les données au format JSON
+        const staffData = await StaffModel.findMany();
+        res.status(200).json(staffData);
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -125,6 +70,54 @@ export const deleteAllStaff = async (req: Request, res: Response): Promise<void>
     try {
         await StaffModel.deleteMany();
         res.status(200).json({ message: "Liste vidée avec succès" });
+    } catch (error) {
+        console.error('Erreur lors de la suppression des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+export const addStaff = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data) {
+
+            await StaffModel.create({
+                data: {
+                    pseudo: data.names.replace(" ", "").toLowerCase(),
+                    names: data.names,
+                    role: data.role,
+                    pole: data.pole,
+                }
+            });
+            res.status(200).json({ message: "Membre ajouté avec succès" });
+
+        } else {
+            res.status(400).json({ message: 'Les data manquent' });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+
+// AREA
+export const getAllAreas = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const areas = await AreaModel.findMany({
+            include: {
+                staff: {
+                    include: {
+                        staff: true
+                    }
+                }
+            }
+        });
+        res.status(200).json(areas);
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });

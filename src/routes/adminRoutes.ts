@@ -1,15 +1,20 @@
-import { deleteAllStaff, getAllStaff, handleFileUploadDivision, handleFileUploadStaff } from "../controllers/adminController";
+import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
 const router = Router();
 
-// File upload route
-router.post("/excel/staff", upload.single("file"), handleFileUploadStaff);
-router.post("/excel/division", upload.single("file"), handleFileUploadDivision);
-
 //
-router.get("/staff/get-all", upload.single("file"), getAllStaff);
-router.delete("/staff/delete-all", upload.single("file"), deleteAllStaff);
+router.post("/excel/staff", upload.single("file"), handleFileUploadStaff);
+
+// staff
+router.delete("/staff/delete-all", deleteAllStaff);
+router.get("/staff/get-all", getAllStaff);
+router.post("/staff/add", addStaff);
+
+// staff
+// router.delete("/staff/delete-all", deleteAllStaff);
+router.get("/area/get-all", getAllAreas);
+// router.post("/staff/add", addStaff);
 
 export default router;
