@@ -124,6 +124,33 @@ export const getAllAreas = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
+export const getStaffOfAreaById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const areaId = req.params.areaId
+        if (areaId) {
+
+            const areas = await AreaModel.findUnique({
+                where: {
+                    id: Number(areaId)
+                },
+                include: {
+                    staff: {
+                        include: {
+                            staff: true
+                        }
+                    }
+                }
+            });
+            const staffs = areas?.staff.map((st: any) => st.staff)
+            res.status(200).json(staffs);
+
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 
 // CHECK
 export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
@@ -131,7 +158,7 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
 
         const data = req.body;
 
-        if (data) {
+        if (data && data.staff_id && data.area_id) {
 
             const staff = await StaffModel.findUnique({
                 where: {
@@ -167,7 +194,7 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
             });
 
         } else {
-            res.status(400).json({ok: false, message: 'Les data manquent' });
+            res.status(400).json({ ok: false, message: "le corps de la requête n'est pas correcte. staff_id ou area_id est null" });
         }
 
 

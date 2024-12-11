@@ -1,7 +1,10 @@
 const apiUrl = {
+    allZoneStaff: '/api/admin/area/get-staff/',
     allStaff: '/api/admin/staff/get-all',
     allZone: '/api/admin/area/get-all',
 };
+
+var activeZone = { label: "" };
 
 async function fetchAllStaffData() {
 
@@ -45,10 +48,12 @@ async function fetchAllZoneData() {
             const zonesContainer = document.getElementById('zones-container');
 
             console.log(zonesData);
+            if (zonesData.length != 0) {
+                selectActiveZone(zonesData[0]);
+            }
 
             zonesContainer.innerHTML = '';
 
-            // Parcours les zones et crée les boutons
             zonesData.forEach((zone, index) => {
                 const button = document.createElement('button');
                 button.type = 'button';
@@ -56,7 +61,9 @@ async function fetchAllZoneData() {
                     } ${index === zonesData.length - 1 ? 'rounded-e-lg' : ''
                     } border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white`;
                 button.textContent = zone.label;
-                button.id = zone.id;
+                button.addEventListener("click", () => {
+                    selectActiveZone(zone);
+                })
                 zonesContainer.appendChild(button);
             });
 
@@ -70,12 +77,12 @@ async function fetchAllZoneData() {
         });
 }
 
-async function fetchStaffZoneData() {
+async function fetchStaffZoneData(areaId) {
 
     // const tableLoader = document.getElementById('loader-table');
     // tableLoader.classList.remove('hidden');
 
-    await fetch(apiUrl.allStaff)
+    await fetch(apiUrl.allZoneStaff + areaId)
         .then(async (response) => {
 
             if (!response.ok) {
@@ -106,7 +113,6 @@ function populateAllStaffTable(staffList) {
         num += 1;
         row.innerHTML = `
             <td class="px-4 py-2 border-b">${num}</td>
-            <td class="px-4 py-2 border-b">${staff.id}</td>
             <td class="px-4 py-2 border-b">${staff.names}</td>
             <td class="px-4 py-2 border-b">${staff.pole}</td>
             <td class="px-4 py-2 border-b">${staff.role}</td>
@@ -140,7 +146,7 @@ function populateAllStaffTable(staffList) {
 
 function populateStaffZoneTable(staffList) {
     const tableBody = document.querySelector('#zoneStaffTable tbody');
-    tableBody.innerHTML = ''; // Vide le tableau avant de le remplir
+    tableBody.innerHTML = '';
 
     var num = 0;
     staffList.forEach((staff) => {
@@ -178,9 +184,12 @@ function populateStaffZoneTable(staffList) {
 
 }
 
+function selectActiveZone(area) {
+    activeZone = area;
+    fetchStaffZoneData(area.id);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchAllStaffData();
     fetchAllZoneData();
-
-    fetchStaffZoneData();
 });
