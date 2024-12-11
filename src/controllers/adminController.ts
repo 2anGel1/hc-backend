@@ -157,7 +157,8 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
     try {
 
         const data = req.body;
-
+        console.log(data);
+        
         if (data && data.staff_id && data.area_id) {
 
             const staff = await StaffModel.findUnique({
