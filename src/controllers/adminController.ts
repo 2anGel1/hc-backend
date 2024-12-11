@@ -1,6 +1,6 @@
+import { AreaModel, StaffModel } from "../prisma";
 import { Request, Response } from "express";
 import { Staff } from "../utils/interface";
-import { AreaModel, StaffModel } from "../prisma";
 import csvParser from "csv-parser";
 import fs from "fs";
 
