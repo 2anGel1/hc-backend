@@ -27,6 +27,10 @@
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Zones d'accès
                             </a>
+                            <a href="/history.html"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Historique
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -46,8 +50,10 @@
 
         <div class="mx-auto max-w-7xl flex gap-4 px-4 py-6">
 
+            <!-- BLOCKS -->
             <div>
 
+                <!-- EXXPORT LISTE -->
                 <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
                         Importer une liste
@@ -76,11 +82,14 @@
                     </form>
                 </div>
 
+                <!-- FORM -->
                 <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
+                    <!-- HEAD -->
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
                         Ajouter un membre
                     </h2>
 
+                    <!-- FORM -->
                     <form id="addStaffForm" method="POST">
                         <div class="space-y-12">
 
@@ -90,7 +99,7 @@
                                         <label for="names" class="block text-sm/6 font-medium text-gray-900">
                                             Nom et Prénoms</label>
                                         <div class="mt-2">
-                                            <input type="text" name="names" id="names" autocomplete="given-name"
+                                            <input type="text" name="names" id="names" required
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                                         </div>
                                     </div>
@@ -99,7 +108,7 @@
                                         <label for="role" class="block text-sm/6 font-medium text-gray-900">
                                             Fonction</label>
                                         <div class="mt-2">
-                                            <input type="text" name="role" id="role" autocomplete="family-name"
+                                            <input type="text" name="role" id="role" required
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                                         </div>
                                     </div>
@@ -110,11 +119,11 @@
                                         <div class="mt-2 grid grid-cols-1">
                                             <select id="country" name="pole" autocomplete="country-name"
                                                 class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                                                <option value="Division_1">Division_1</option>
-                                                <option value="Division_2">Division_2</option>
-                                                <option value="Division_3">Division_3</option>
-                                                <option value="Division_4">Division_4</option>
-                                                <option value="Division_5">Division_5</option>
+                                                <option value="Division_1">IFM</option>
+                                                <option value="Division_2">MCI</option>
+                                                <option value="Division_3">SONORISATION</option>
+                                                <option value="Division_4">VVIP / AUTORITES</option>
+                                                <option value="Division_5">STAFF HIMRA</option>
                                             </select>
                                             <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                                                 viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
@@ -154,12 +163,19 @@
 
             </div>
 
+            <!-- LISTE -->
             <div class="w-full border border-gray-200 shadow rounded-lg p-6 mb-4">
 
+                <!-- HEAD -->
                 <div class="w-full flex justify-between items-center border-b border-gray-900/10 mb-4 pb-5">
-                    <h2 class="text-xl mb-4 font-semibold text-gray-900">
+                    <h2 class="text-xl font-semibold text-gray-900">
                         Liste des membres du staff
                     </h2>
+
+                    <div class="sm:col-span-4">
+                        <input type="text" name="staffSearch" id="staffSearch" placeholder="Rechercher..."
+                            class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    </div>
 
                     <div class="flex gap-4">
                         <form id="downloadForm" enctype="multipart/form-data" method="GET"
@@ -188,6 +204,7 @@
 
                 </div>
 
+                <!-- TABLE -->
                 <table id="staffTable" class="min-w-full m-2 bg-white border border-gray-300">
                     <thead class="bg-gray-200">
                         <tr>
@@ -202,7 +219,44 @@
                     </tbody>
                 </table>
 
-                <p class="text-center hidden mt-4" id="loader-table">Chargement des données...</p>
+                <!-- SKELETON -->
+                <div role="status" class="w-full animate-pulse" id="loader-table">
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div class="w-full flex gap-1 mb-2">
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        <div class="h-5 bg-gray-200 rounded w-full"></div>
+                    </div>
+                </div>
             </div>
 
         </div>

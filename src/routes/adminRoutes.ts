@@ -1,4 +1,4 @@
-import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea } from "../controllers/adminController";
+import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea, addArea, deleteArea } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
@@ -13,11 +13,11 @@ router.get("/staff/get-all", getAllStaff);
 router.post("/staff/add", addStaff);
 
 // area
-// router.delete("/staff/delete-all", deleteAllStaff);
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);
 router.post("/area/associate", associateStaffToArea);
+router.delete("/area/delete/:areaId", deleteArea);
 router.get("/area/get-all", getAllAreas);
-// router.post("/staff/add", addStaff);
+router.post("/area/add", addArea);
 
 // check
 router.post("/qrcode/check", checkQrCode);

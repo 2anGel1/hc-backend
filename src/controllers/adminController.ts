@@ -107,6 +107,54 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
 
 // AREA
 
+// add area
+export const addArea = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data && data.label) {
+
+            await AreaModel.create({
+                data: {
+                    label: data.label
+                }
+            });
+            res.status(200).json({ message: "Zone ajoutée avec succès" });
+
+        } else {
+            res.status(400).json({ message: 'Les datas manquent' });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// delete area
+export const deleteArea = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.params.areaId;
+        if (id) {
+
+            await AreaModel.delete({
+                where: {
+                    id: Number(id)
+                }
+            });
+            res.status(200).json({ message: "Zone supprimée" });
+
+        } else {
+            res.status(400).json({ message: 'les datas sont manquantes ou incomplètes' });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la suppression des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 // all-area
 export const getAllAreas = async (req: Request, res: Response): Promise<void> => {
     try {

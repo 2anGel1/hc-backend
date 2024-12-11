@@ -3,6 +3,9 @@ const apiUrl = {
     allZoneStaff: '/api/admin/area/get-staff/',
     allStaff: '/api/admin/staff/get-all',
     allZone: '/api/admin/area/get-all',
+
+    removeAera: '/api/admin/area/delete/',
+    addAera: '/api/admin/area/add',
 };
 
 const selectedZoneStaff = new Set();
@@ -26,6 +29,26 @@ async function fetchAllStaffData() {
     const loader = document.getElementById('loaderAllStaff');
     loader.classList.remove('hidden');
 
+    if ($.fn.DataTable.isDataTable('#allStaffTable')) {
+        $('#allStaffTable').DataTable().destroy();
+        $('#allStaffTable').empty();
+        $('#allStaffTable').append(`
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-4 py-2 text-sm border-b"></th>
+                        <th class="px-4 py-2 text-sm border-b">#</th>
+                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
+                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            `);
+    }
+    const table = document.querySelector('#allStaffTable');
+    table.classList.add('hidden');
+
     await fetch(apiUrl.allStaff)
         .then(async (response) => {
 
@@ -45,6 +68,7 @@ async function fetchAllStaffData() {
         })
         .finally(() => {
             loader.classList.add('hidden');
+            table.classList.remove('hidden');
         });
 }
 
@@ -84,6 +108,26 @@ async function fetchStaffZoneData(areaId) {
     const loader = document.getElementById('loaderAllStaffZone');
     loader.classList.remove('hidden');
 
+    if ($.fn.DataTable.isDataTable('#zoneStaffTable')) {
+        $('#zoneStaffTable').DataTable().destroy();
+        $('#zoneStaffTable').empty();
+        $('#zoneStaffTable').append(`
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-4 py-2 text-sm border-b"></th>
+                        <th class="px-4 py-2 text-sm border-b">#</th>
+                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
+                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            `);
+    }
+    const table = document.querySelector('#zoneStaffTable');
+    table.classList.add('hidden');
+
     await fetch(apiUrl.allZoneStaff + areaId)
         .then(async (response) => {
 
@@ -103,6 +147,7 @@ async function fetchStaffZoneData(areaId) {
         })
         .finally(() => {
             loader.classList.add('hidden');
+            table.classList.remove('hidden');
         });
 }
 
@@ -314,13 +359,24 @@ function renderZones() {
 
     zonesContainer.innerHTML = '';
 
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = `px-4 py-2 text-sm font-bold
+        hover:bg-red-500 hover:text-white
+        text-gray-900 border-gray-200
+        border uppercase rounded-s-lg`;
+
+    removeBtn.textContent = "-";
+    removeBtn.addEventListener("click", () => {
+        document.getElementById('removeAreaModal').classList.remove('hidden');
+    })
+    zonesContainer.appendChild(removeBtn);
+
     allZone.forEach((zone, index) => {
 
         const button = document.createElement('button');
         button.type = 'button';
         button.className = `px-4 py-2 text-sm font-medium border uppercase
-            ${index === 0 ? 'rounded-s-lg' : ''} 
-            ${index === allZone.length - 1 ? 'rounded-e-lg' : ''}
             ${zone.id === activeZone.id ? 'text-blue-700 bg-gray-100' : 'bg-white text-gray-900 border-gray-200'} 
             hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700`;
 
@@ -329,8 +385,22 @@ function renderZones() {
             selectActiveZone(zone);
             renderZones();
         })
+
         zonesContainer.appendChild(button);
     });
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = `px-4 py-2 text-sm font-bold
+        hover:bg-blue-500 hover:text-white
+        text-gray-900 border-gray-200
+        border uppercase rounded-e-lg`;
+
+    addBtn.textContent = "+";
+    addBtn.addEventListener("click", () => {
+        document.getElementById('addAreaModal').classList.remove('hidden');
+    })
+    zonesContainer.appendChild(addBtn);
 
 }
 
@@ -430,6 +500,70 @@ document.querySelector('#staffSearch').addEventListener('input', (e) => {
 
     currentAllStaff = newListe.map(el => el);
     populateAllStaffTable(newListe);
+
+});
+
+document.querySelector('#addAreaForm').addEventListener('submit', function (event) {
+
+    event.preventDefault();
+
+    const loader = document.getElementById('addAreaLoader');
+    loader.classList.remove('hidden');
+
+    const formData = new FormData(this);
+    const action = apiUrl.addAera;
+
+    const data = Object.fromEntries(formData.entries());
+
+    fetch(action, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        method: 'POST',
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                alert("Erreur lors de l'ajout");
+            }
+
+        })
+        .catch(error => {
+            loader.classList.add('hidden');
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            loader.classList.add('hidden');
+            window.location.reload(true);
+        });
+
+});
+
+document.querySelector('#removeAreaButton').addEventListener('click', function (event) {
+
+    event.preventDefault();
+
+    const loader = document.getElementById('removeAreaLoader');
+    loader.classList.remove('hidden');
+
+    const action = apiUrl.removeAera + activeZone.id;
+
+    fetch(action, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                alert("Erreur lors de la suppression");
+            }
+
+        })
+        .catch(error => {
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            window.location.reload(true);
+        });
 
 });
 
