@@ -1,4 +1,4 @@
-import { AreaModel, StaffModel } from "../prisma";
+import { AreaModel, StaffAreaModel, StaffModel } from "../prisma";
 import { Request, Response } from "express";
 import { Staff } from "../utils/interface";
 import csvParser from "csv-parser";
@@ -106,6 +106,8 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
 
 
 // AREA
+
+// all-area
 export const getAllAreas = async (req: Request, res: Response): Promise<void> => {
     try {
         const areas = await AreaModel.findMany({
@@ -124,6 +126,7 @@ export const getAllAreas = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
+// all staff-area
 export const getStaffOfAreaById = async (req: Request, res: Response): Promise<void> => {
     try {
         const areaId = req.params.areaId
@@ -151,15 +154,14 @@ export const getStaffOfAreaById = async (req: Request, res: Response): Promise<v
     }
 }
 
-
-// CHECK
-export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
+// associate/disossiate
+export const associateStaffToArea = async (req: Request, res: Response): Promise<void> => {
     try {
 
         const data = req.body;
-        console.log(data);
-        
-        if (data && data.staff_id && data.area_id) {
+        // console.log(data);
+
+        if (data && data.staff_id && data.area_id && data.action) {
 
             const staff = await StaffModel.findUnique({
                 where: {
@@ -177,6 +179,75 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
             const area = await AreaModel.findUnique({
                 where: {
                     id: data.area_id
+                }
+            });
+
+            if (!area) {
+                res.status(400).json({ ok: false, message: "Zone introuvable" });
+            }
+
+            const staffIsPermitted = staff?.areas.find((area: any) => area.areaId == data.area_id);
+            const isPermitted = staffIsPermitted != null;
+
+            if (data.action == "associate" && !isPermitted) {
+                await StaffAreaModel.create({
+                    data: {
+                        staffId: data.staff_id,
+                        areaId: data.area_id
+                    }
+                });
+            } else if (data.action == "dissociate" && isPermitted) {
+                await StaffAreaModel.delete({
+                    where: {
+                        staffId_areaId: {
+                            staffId: staffIsPermitted.staffId,
+                            areaId: staffIsPermitted.areaId
+                        }
+                    }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+            });
+
+        } else {
+            res.status(400).json({ ok: false, message: "le corps de la requête n'est pas correcte. staff_id ou area_id est null" });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+
+// CHECK
+export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+        console.log(data);
+
+        if (data && data.staff_id && data.area_id) {
+
+            const staff = await StaffModel.findUnique({
+                where: {
+                    id: data.staff_id
+                },
+                include: {
+                    areas: true
+                }
+            });
+
+            if (!staff) {
+                res.status(400).json({ ok: false, message: "Utilisateur introuvable" });
+            }
+
+            const area = await AreaModel.findUnique({
+                where: {
+                    id: Number(data.area_id)
                 }
             });
 

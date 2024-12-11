@@ -1,4 +1,4 @@
-import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById } from "../controllers/adminController";
+import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
@@ -15,6 +15,7 @@ router.post("/staff/add", addStaff);
 // area
 // router.delete("/staff/delete-all", deleteAllStaff);
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);
+router.post("/area/associate", associateStaffToArea);
 router.get("/area/get-all", getAllAreas);
 // router.post("/staff/add", addStaff);
 
