@@ -1,4 +1,4 @@
-import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff } from "../controllers/adminController";
+import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
@@ -16,5 +16,8 @@ router.post("/staff/add", addStaff);
 // router.delete("/staff/delete-all", deleteAllStaff);
 router.get("/area/get-all", getAllAreas);
 // router.post("/staff/add", addStaff);
+
+// check
+router.post("/qrcode/check", checkQrCode);
 
 export default router;

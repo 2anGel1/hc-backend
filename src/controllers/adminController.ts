@@ -123,3 +123,56 @@ export const getAllAreas = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
+
+
+// CHECK
+export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data) {
+
+            const staff = await StaffModel.findUnique({
+                where: {
+                    id: data.staff_id
+                },
+                include: {
+                    areas: true
+                }
+            });
+
+            if (!staff) {
+                res.status(400).json({ ok: false, message: "Utilisateur introuvable" });
+            }
+
+            const area = await AreaModel.findUnique({
+                where: {
+                    id: data.area_id
+                }
+            });
+
+            if (!area) {
+                res.status(400).json({ ok: false, message: "Zone introuvable" });
+            }
+
+            const staffIsPermitted = staff?.areas.find((area) => area.areaId == data.area_id);
+            const isPermitted = staffIsPermitted != null;
+
+            res.status(200).json({
+                isPermitted: isPermitted,
+                checkHistory: [],
+                user: staff,
+                ok: true,
+            });
+
+        } else {
+            res.status(400).json({ok: false, message: 'Les data manquent' });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
