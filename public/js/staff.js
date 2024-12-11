@@ -148,11 +148,11 @@ function populateTable(staffList) {
         const row = document.createElement('tr');
         num += 1;
         row.innerHTML = `
-            <td class="px-4 py-2 border-b">${num}</td>
-            <td class="px-4 py-2 border-b">${staff.id}</td>
-            <td class="px-4 py-2 border-b">${staff.names}</td>
-            <td class="px-4 py-2 border-b">${staff.pole}</td>
-            <td class="px-4 py-2 border-b">${staff.role}</td>
+            <td class="px-4 py-2 text-sm border-b">${num}</td>
+            <td class="px-4 py-2 text-sm border-b">${staff.id}</td>
+            <td class="px-4 py-2 text-sm border-b">${staff.names}</td>
+            <td class="px-4 py-2 text-sm border-b">${staff.pole}</td>
+            <td class="px-4 py-2 text-sm border-b">${staff.role}</td>
         `;
         tableBody.appendChild(row);
     });

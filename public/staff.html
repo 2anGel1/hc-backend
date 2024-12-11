@@ -48,7 +48,7 @@
 
             <div>
 
-                <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 mb-6">
+                <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
                         Importer une liste
                     </h2>
@@ -76,7 +76,7 @@
                     </form>
                 </div>
 
-                <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 mb-6">
+                <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
                         Ajouter un membre
                     </h2>
@@ -154,7 +154,8 @@
 
             </div>
 
-            <div class="w-full bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="w-full border border-gray-200 shadow rounded-lg p-6 mb-4">
+
                 <div class="w-full flex justify-between items-center border-b border-gray-900/10 mb-4 pb-5">
                     <h2 class="text-xl mb-4 font-semibold text-gray-900">
                         Liste des membres du staff
@@ -184,21 +185,23 @@
                             </svg>
                         </button>
                     </div>
+
                 </div>
 
                 <table id="staffTable" class="min-w-full m-2 bg-white border border-gray-300">
                     <thead class="bg-gray-200">
                         <tr>
-                            <th class="px-4 py-2 border-b">#</th>
-                            <th class="px-4 py-2 border-b">Qrcode ID</th>
-                            <th class="px-4 py-2 border-b">Nom et Prénoms</th>
-                            <th class="px-4 py-2 border-b">Pôle</th>
-                            <th class="px-4 py-2 border-b">Fonction</th>
+                            <th class="px-4 py-2 text-sm border-b">#</th>
+                            <th class="px-4 py-2 text-sm border-b">Qrcode ID</th>
+                            <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
+                            <th class="px-4 py-2 text-sm border-b">Pôle</th>
+                            <th class="px-4 py-2 text-sm border-b">Fonction</th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
+
                 <p class="text-center hidden mt-4" id="loader-table">Chargement des données...</p>
             </div>
 

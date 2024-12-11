@@ -7,10 +7,15 @@ const apiUrl = {
 
 const selectedZoneStaff = new Set();
 const selectedStaff = new Set();
+
 var activeZone = { label: "" };
+
 var allZoneStaff = new Array();
 var allStaff = new Array();
 var allZone = new Array();
+
+var currentAllZoneStaff = new Array();
+var currentAllStaff = new Array();
 
 
 // GET
@@ -29,11 +34,9 @@ async function fetchAllStaffData() {
             }
 
             const staffData = await response.json();
-            allStaff = [];
-            staffData.forEach((staff) => {
-                allStaff.push(staff);
-            })
-            populateAllStaffTable();
+            allStaff = staffData.map((staff) => staff);
+            currentAllStaff = staffData.map((staff) => staff);
+            populateAllStaffTable(allStaff);
 
         })
         .catch(error => {
@@ -90,7 +93,8 @@ async function fetchStaffZoneData(areaId) {
 
             const staffData = await response.json();
             allZoneStaff = staffData.map(staff => staff);
-            populateStaffZoneTable();
+            currentAllZoneStaff = staffData.map(staff => staff);
+            populateStaffZoneTable(allZoneStaff);
 
         })
         .catch(error => {
@@ -108,9 +112,9 @@ async function associateStaffToArea(all = true, action = "associate") {
 
     var liste = [];
     if (action == "associate") {
-        liste = all ? allStaff.map(el => el.id) : Array.from(selectedStaff);
+        liste = all ? currentAllStaff.map(el => el.id) : Array.from(selectedStaff);
     } else {
-        liste = all ? allZoneStaff.map(el => el.id) : Array.from(selectedZoneStaff);
+        liste = all ? currentAllZoneStaff.map(el => el.id) : Array.from(selectedZoneStaff);
     }
 
     var loaderId = "associateAllLoader"
@@ -130,8 +134,8 @@ async function associateStaffToArea(all = true, action = "associate") {
 
             const data = {
                 area_id: activeZone.id,
-                action: action,
                 staff_id: element,
+                action: action,
             }
 
             await fetch(apiUrl.associateStaffToArea, {
@@ -175,7 +179,7 @@ async function associateStaffToArea(all = true, action = "associate") {
 // POPULATE
 
 // all staff table
-function populateAllStaffTable() {
+function populateAllStaffTable(liste) {
 
     if ($.fn.DataTable.isDataTable('#allStaffTable')) {
         $('#allStaffTable').DataTable().destroy();
@@ -199,7 +203,7 @@ function populateAllStaffTable() {
     tableBody.innerHTML = '';
 
     var num = 0;
-    allStaff.forEach((staff) => {
+    liste.forEach((staff) => {
         const row = document.createElement('tr');
         num += 1;
         row.innerHTML = `
@@ -239,7 +243,7 @@ function populateAllStaffTable() {
 }
 
 // all staff-zone table
-function populateStaffZoneTable() {
+function populateStaffZoneTable(liste = []) {
 
     if ($.fn.DataTable.isDataTable('#zoneStaffTable')) {
         $('#zoneStaffTable').DataTable().destroy();
@@ -263,7 +267,7 @@ function populateStaffZoneTable() {
     tableBody.innerHTML = '';
 
     var num = 0;
-    allZoneStaff.forEach((staff) => {
+    liste.forEach((staff) => {
         const row = document.createElement('tr');
         num += 1;
         row.innerHTML = `
@@ -314,11 +318,11 @@ function renderZones() {
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `px-4 py-2 text-sm font-medium border bg-gray-100
+        button.className = `px-4 py-2 text-sm font-medium border uppercase
             ${index === 0 ? 'rounded-s-lg' : ''} 
-            ${index === allZone.length - 1 ? 'rounded-e-lg' : ''} 
+            ${index === allZone.length - 1 ? 'rounded-e-lg' : ''}
+            ${zone.id === activeZone.id ? 'text-blue-700 bg-gray-100' : 'bg-white text-gray-900 border-gray-200'} 
             hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700`;
-        // ${zone.id === activeZone.id ? 'text-blue-700 bg-gray-100' : 'bg-white text-gray-900 border-gray-200'} 
 
         button.textContent = zone.label;
         button.addEventListener("click", () => {
@@ -372,7 +376,7 @@ async function handleItemSelect2(staffId) {
     } else {
         selectedZoneStaff.delete(staffId);
     }
-    
+
     const associateBtn = document.getElementById('dissociateBtn');
     if (selectedZoneStaff.size != 0) {
         if (associateBtn.classList.contains('hidden'))
@@ -393,9 +397,44 @@ async function handleItemSelect2(staffId) {
 
 }
 
-// INIT
+// EVENT LISTENER
+
+document.querySelector('#staffZoneSearch').addEventListener('input', (e) => {
+
+    const searchParam = e.target.value.toLowerCase();
+
+    const newListe = allZoneStaff.filter((staff) => {
+        return (
+            staff.names.toLowerCase().includes(searchParam) ||
+            staff.id.toLowerCase().includes(searchParam) ||
+            staff.pole.toLowerCase().includes(searchParam)
+        )
+    });
+
+    currentAllZoneStaff = newListe.map(el => el);
+    populateStaffZoneTable(newListe);
+
+});
+
+document.querySelector('#staffSearch').addEventListener('input', (e) => {
+
+    const searchParam = e.target.value.toLowerCase();
+
+    const newListe = allStaff.filter((staff) => {
+        return (
+            staff.names.toLowerCase().includes(searchParam) ||
+            staff.id.toLowerCase().includes(searchParam) ||
+            staff.pole.toLowerCase().includes(searchParam)
+        )
+    });
+
+    currentAllStaff = newListe.map(el => el);
+    populateAllStaffTable(newListe);
+
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchAllStaffData();
     fetchAllZoneData();
 });
+
