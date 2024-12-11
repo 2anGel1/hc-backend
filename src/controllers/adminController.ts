@@ -156,7 +156,7 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
                 res.status(400).json({ ok: false, message: "Zone introuvable" });
             }
 
-            const staffIsPermitted = staff?.areas.find((area) => area.areaId == data.area_id);
+            const staffIsPermitted = staff?.areas.find((area: any) => area.areaId == data.area_id);
             const isPermitted = staffIsPermitted != null;
 
             res.status(200).json({
