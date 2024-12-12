@@ -18,11 +18,12 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on("data", async (row) => {
-
+                const trueRow = row["PSEUDO;FONCTION;POLES"].toString().split(";");
+                // console.log(trueRow);
                 users.push({
-                    names: row.names,
-                    pole: row.pole,
-                    role: row.role,
+                    names: trueRow[0],
+                    role: trueRow[1],
+                    pole: trueRow[2],
                 });
 
             })
