@@ -1,12 +1,16 @@
 const apiUrl = {
     deleteAllStaff: '/api/admin/staff/delete-all',
+    downloadStaffQrcode: '/api/qr/generate-one/',
     uploadStaffExcel: '/api/admin/excel/staff',
+    removeStaff: '/api/admin/staff/delete/',
     allStaff: '/api/admin/staff/get-all',
+    getStaffQrcode: '/api/qr/get-one/',
     addStaff: '/api/admin/staff/add',
 };
 
 var currentAllStaff = new Array();
 var allStaff = new Array();
+var currentStaff = {};
 
 // FETCH
 
@@ -44,7 +48,7 @@ async function fetchStaffData() {
 
 // POPULATE
 
-function populateTable(liste) {
+async function populateTable(liste) {
 
     if ($.fn.DataTable.isDataTable('#staffTable')) {
         $('#staffTable').DataTable().destroy();
@@ -52,7 +56,7 @@ function populateTable(liste) {
         $('#staffTable').append(`
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-sm border-b">#</th>
+                        <th class="px-4 py-2 text-sm border-b border-r">#</th>
                         <th class="px-4 py-2 text-sm border-b">Qrcode ID</th>
                         <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
                         <th class="px-4 py-2 text-sm border-b">Pôle</th>
@@ -65,26 +69,47 @@ function populateTable(liste) {
     }
 
     const tableBody = document.querySelector('#staffTable tbody');
-    tableBody.innerHTML = ''; 
+    tableBody.innerHTML = '';
+
 
     var num = 0;
-    liste.forEach((staff) => {
-        const row = document.createElement('tr');
-        num += 1;
-        row.innerHTML = `
-            <td class="px-4 py-2 text-sm border-b">${num}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.id}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.names}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.pole}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.role}</td>
-        `;
-        tableBody.appendChild(row);
-    });
+    await Promise.all(
+
+        liste.map(async (staff) => {
+            const row = document.createElement('tr');
+            row.className = `hover:bg-gray-100 cursor-pointer`;
+            row.addEventListener('click', async () => {
+                currentStaff = staff;
+
+                const imageSource = await getStaffImage();
+
+                document.getElementById("modalStaffImage").src = imageSource;
+                document.getElementById('modalStaffInfo').classList.remove('hidden');
+
+                document.getElementById('modalStaffNames').textContent = staff.names.toUpperCase();
+                document.getElementById('modalStaffId').textContent = staff.id;
+                if (document.getElementById('modalStaffPole'))
+                    document.getElementById('modalStaffPole').textContent = staff.pole;
+
+                if (document.getElementById('modalStaffRole'))
+                    document.getElementById('modalStaffRole').textContent = staff.role;
+            })
+            num += 1;
+            row.innerHTML = `
+                <td class="px-4 py-2 text-sm text-center border-b border-r">${num}</td>
+                <td class="px-4 py-2 text-sm border-b">${staff.id}</td>
+                <td class="px-4 py-2 text-sm border-b">${staff.names}</td>
+                <td class="px-4 py-2 text-sm border-b">${staff.pole}</td>
+                <td class="px-4 py-2 text-sm border-b">${staff.role}</td>
+            `;
+            tableBody.appendChild(row);
+        })
+    );
 
     $('#staffTable').DataTable({
         searching: false,
         ordering: true,
-        pageLength: 7,
+        pageLength: 5,
         paging: true,
         language: {
             lengthMenu: "",
@@ -106,11 +131,56 @@ function populateTable(liste) {
 
 // OTHER
 
+async function getStaffImage() {
 
+    try {
+        const action = apiUrl.getStaffQrcode + currentStaff.id
+        const response = await fetch(action);
+
+        if (response.ok) {
+
+            const qrCodeBase64 = await response.json();
+            return qrCodeBase64;
+
+        } else {
+            throw new Error("Failed to fetch QR code");
+            // return ""
+        }
+
+    } catch (error) {
+        console.error("Error downloading QR code:", error);
+        return "";
+    }
+
+}
 
 // EVENT LISTENER
 
 document.addEventListener('DOMContentLoaded', fetchStaffData);
+
+document.querySelector('#donwloadSatffQrButton').addEventListener('click', async function () {
+
+    try {
+        const action = apiUrl.downloadStaffQrcode + currentStaff.id
+        const response = await fetch(action);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch QR code");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${currentStaff.names}_${currentStaff.pole}_${currentStaff.role}_${currentStaff.id}_qrcode.png`;
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Error downloading QR code:", error);
+    }
+
+});
 
 document.querySelector('#uploadStaffForm').addEventListener('submit', function (event) {
 
@@ -234,5 +304,34 @@ document.querySelector('#staffSearch').addEventListener('input', (e) => {
 
     currentAllStaff = newListe.map(el => el);
     populateTable(newListe);
+
+});
+
+document.querySelector('#removeStaffButton').addEventListener('click', function (event) {
+
+    event.preventDefault();
+
+    const loader = document.getElementById('removeStaffLoader');
+    loader.classList.remove('hidden');
+
+    const action = apiUrl.removeStaff + currentStaff.id;
+
+    fetch(action, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                alert("Erreur lors de la suppression");
+            }
+
+        })
+        .catch(error => {
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            window.location.reload(true);
+        });
 
 });

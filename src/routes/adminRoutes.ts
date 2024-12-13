@@ -1,16 +1,16 @@
-import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea, addArea, deleteArea } from "../controllers/adminController";
+import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea, addArea, deleteArea, deleteStaff } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
 const router = Router();
 
-//
-router.post("/excel/staff", upload.single("file"), handleFileUploadStaff);
-
 // staff
+router.post("/excel/staff", upload.single("file"), handleFileUploadStaff);
+router.delete("/staff/delete/:staffId", deleteStaff);
 router.delete("/staff/delete-all", deleteAllStaff);
 router.get("/staff/get-all", getAllStaff);
 router.post("/staff/add", addStaff);
+
 
 // area
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);

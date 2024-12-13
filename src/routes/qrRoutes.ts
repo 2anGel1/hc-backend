@@ -1,9 +1,9 @@
 import { Router, Response, Request } from "express";
+import { StaffModel } from "../prisma";
 import archiver from "archiver";
 import QRCode from "qrcode";
 import path from "path";
 import fs from "fs";
-import { StaffModel } from "../prisma";
 
 const router = Router();
 
@@ -49,7 +49,6 @@ router.get("/generate-all", async (req: Request, res: Response) => {
 
         archive.pipe(output);
 
-        // Add all QR code files to the archive
         fs.readdirSync(qrDir).forEach((file) => {
             archive.file(path.join(qrDir, file), { name: file });
         });
@@ -59,6 +58,82 @@ router.get("/generate-all", async (req: Request, res: Response) => {
         console.error("Error generating QR codes or zipping:", error);
         res.status(500).json({ error: "Failed to generate QR codes" });
     }
+
 });
+
+router.get("/get-one/:staffId", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const memberId = req.params.staffId;
+
+        if (!memberId) {
+            res.status(400).json({ error: "Staff ID is required" });
+            return;
+        }
+
+        const member = await StaffModel.findUnique({
+            where: { id: memberId },
+        });
+
+        if (!member) {
+            res.status(404).json({ error: "Staff member not found" });
+            return;
+        }
+
+        // Générer le QR code en base64
+        const qrCodeBase64 = await QRCode.toDataURL(member.id);
+
+        // Renvoyer la page HTML avec le QR code
+        res.status(200).json(qrCodeBase64);
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+        res.status(500).json({ error: "Failed to generate QR code" });
+    }
+});
+
+router.get("/generate-one/:staffId", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const memberId = req.params.staffId;
+
+        if (!memberId) {
+            res.status(400).json({ error: "Staff ID is required" });
+            return;
+        }
+
+        const member = await StaffModel.findUnique({
+            where: { id: memberId },
+        });
+
+        if (!member) {
+            res.status(404).json({ error: "Staff member not found" });
+            return;
+        }
+
+        const qrName = `${member.names}_${member.pole}_${member.role}_${member.id}.png`;
+        const qrDir = path.join(__dirname, "../../uploads");
+
+
+        // Assurez-vous que le répertoire 'uploads' existe
+        if (!fs.existsSync(qrDir)) {
+            fs.mkdirSync(qrDir, { recursive: true });
+        }
+
+        const qrPath = path.join(qrDir, qrName);
+
+        await QRCode.toFile(qrPath, member.id);
+
+        res.download(qrPath, qrName, (err) => {
+            if (err) {
+                console.error("Error sending QR code file:", err);
+                res.status(500).json({ error: "Failed to download QR code" });
+            }
+            fs.unlinkSync(qrPath);
+        });
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+        res.status(500).json({ error: "Failed to generate QR code" });
+    }
+
+});
+
 
 export default router;

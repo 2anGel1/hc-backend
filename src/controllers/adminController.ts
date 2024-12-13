@@ -4,7 +4,10 @@ import { Staff } from "../utils/interface";
 import csvParser from "csv-parser";
 import fs from "fs";
 
-// Handle staff file upload
+
+//  STAFF
+
+// upload staff list
 export const handleFileUploadStaff = async (req: Request, res: Response): Promise<void> => {
     if (!req.file) {
         res.status(400).json({ error: "No file uploaded!" });
@@ -56,7 +59,7 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
     }
 };
 
-//  STAFF
+// get all staff
 export const getAllStaff = async (req: Request, res: Response): Promise<void> => {
     try {
         const staffData = await StaffModel.findMany();
@@ -67,6 +70,7 @@ export const getAllStaff = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
+// delete all staff
 export const deleteAllStaff = async (req: Request, res: Response): Promise<void> => {
     try {
         await StaffModel.deleteMany();
@@ -77,6 +81,7 @@ export const deleteAllStaff = async (req: Request, res: Response): Promise<void>
     }
 }
 
+// add staff
 export const addStaff = async (req: Request, res: Response): Promise<void> => {
     try {
 
@@ -101,6 +106,28 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
 
     } catch (error) {
         console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// delete staff
+export const deleteStaff = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.params.staffId;
+        if (id) {
+
+            await StaffModel.delete({
+                where: {
+                    id
+                }
+            });
+            res.status(200).json({ message: "Membre supprimé" });
+
+        } else {
+            res.status(400).json({ message: 'les datas sont manquantes ou incomplètes' });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la suppression :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 }
@@ -273,6 +300,7 @@ export const associateStaffToArea = async (req: Request, res: Response): Promise
 
 
 // CHECK
+
 export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
     try {
 

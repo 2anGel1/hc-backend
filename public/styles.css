@@ -758,6 +758,10 @@ video {
   animation: spin 1s linear infinite;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .appearance-none {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -802,6 +806,10 @@ video {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-\[100px\] {
+  gap: 100px;
 }
 
 .gap-x-6 {
@@ -873,6 +881,10 @@ video {
 
 .border-b {
   border-bottom-width: 1px;
+}
+
+.border-r {
+  border-right-width: 1px;
 }
 
 .border-gray-200 {
@@ -1363,6 +1375,10 @@ video {
 
   .sm\:grid-cols-6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .sm\:flex-row {
+    flex-direction: row;
   }
 
   .sm\:flex-row-reverse {
