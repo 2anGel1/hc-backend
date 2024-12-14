@@ -1,8 +1,7 @@
 import app from "./app";
 
-const PORT = process.env.PORT || 8000;
+const PORT: number = parseInt(process.env.PORT || '8000');
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Page de gestion http://localhost:${PORT}/staff.html`);
+app.listen((PORT), '0.0.0.0', () => {
+  console.log(`Serveur en écoute sur http://0.0.0.0:${PORT}`);
 });
