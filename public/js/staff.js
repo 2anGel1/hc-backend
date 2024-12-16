@@ -3,7 +3,7 @@ const apiUrl = {
     downloadStaffQrcode: '/api/qr/generate-one/',
     uploadStaffExcel: '/api/admin/excel/staff',
     removeStaff: '/api/admin/staff/delete/',
-    allStaff: '/api/admin/staff/get-all',
+    allStaff: '/api/admin/staff/get-all/',
     getStaffQrcode: '/api/qr/get-one/',
     addStaff: '/api/admin/staff/add',
 };
@@ -22,7 +22,7 @@ async function fetchStaffData() {
     const table = document.querySelector('#staffTable');
     table.classList.add('hidden');
 
-    await fetch(apiUrl.allStaff)
+    await fetch(apiUrl.allStaff + activeEvent.id)
         .then(async (response) => {
 
             if (!response.ok) {
@@ -259,10 +259,11 @@ document.querySelector('#addStaffForm').addEventListener('submit', function (eve
     loader.classList.remove('hidden');
 
     const formData = new FormData(this);
+    formData.append("event_id", activeEvent.id);
+
     const action = apiUrl.addStaff;
 
     const data = Object.fromEntries(formData.entries());
-    console.log('Données en objet:', data);
 
     fetch(action, {
         headers: { 'Content-Type': 'application/json' },

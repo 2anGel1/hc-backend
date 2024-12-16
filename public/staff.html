@@ -7,68 +7,72 @@
     <link href="./styles.css" rel="stylesheet">
     <title>VIRTUS E.M</title>
 
-    <link rel="shortcut icon" href="./assets/LOGO VIRTUS/LOGO OFFICIEL.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/LOGO_VIRTUS/LOGO_OFFICIEL.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
+    <!-- #dc1919 -->
 </head>
 
 <body class="min-h-full">
+
     <nav class="bg-gray-800">
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl px-6">
             <div class="relative flex items-center justify-between">
-                <div class="flex flex-1  items-center sm:items-stretch sm:justify-between">
-                    <div class="sm:ml-6 sm:block">
+                <div class="flex flex-1 items-center items-stretch justify-between">
+                    <div class="ml-6 block">
                         <div class="flex space-x-4">
-                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                            <a href="/event.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Accueil
+                            </a>
+                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white"
                                 aria-current="page">
                                 Membres du staff
                             </a>
                             <a href="/zone.html"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Zones d'accès
                             </a>
                             <a href="/history.html"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Historique
                             </a>
                         </div>
                     </div>
 
                 </div>
-                <img src="./assets/LOGO VIRTUS/LOGO FULL WHITE.png" width="50" height="50" alt="">
+                <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="50" height="50" alt="">
             </div>
         </div>
     </nav>
 
     <header class="bg-white shadow">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-                Gestion des membres du staff
-            </h1>
-        </div>
+
     </header>
 
     <main>
 
-        <div class="mx-auto max-w-7xl flex gap-4 px-4 py-6">
+        <div class="w-full mx-auto flex gap-4 px-12 py-6" style="background-image: url('./assets/LOGO_VIRTUS/Sanstitre-1-02-removebg(1).png');
+         background-position: center;
+         background-repeat: repeat;
+         background-size: contain;
+         ">
 
             <!-- BLOCKS -->
             <div>
 
                 <!-- EXXPORT LISTE -->
-                <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
-                    <h2 class="text-xl mb-4 font-semibold text-gray-900">
+                <div class="bg-white opacity-85 flex-1 border border-gray-200 rounded-lg shadow p-4 mb-4">
+                    <h2 class="text-md mb-4 font-bold text-gray-900">
                         Importer une liste
                     </h2>
                     <form id="uploadStaffForm" enctype="multipart/form-data" method="POST"
                         action="/api/admin/excel/staff" class="flex items-center">
                         <input type="file" name="file" accept=".csv" required
-                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
 
                         <span class="sm:ml-3">
                             <button type="submit" id="uploadStaffButton"
-                                class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                class="inline-flex items-center rounded bg-black px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
                                 <svg id="uploadStaffLoader" aria-hidden="true" role="status"
                                     class="inline w-4 h-4 me-3 text-white animate-spin hidden" viewBox="0 0 100 101"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,47 +90,55 @@
                 </div>
 
                 <!-- FORM -->
-                <div class="flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
+                <div class="bg-white opacity-85 flex-1 border border-gray-200 rounded-lg shadow p-6 mb-4">
                     <!-- HEAD -->
-                    <h2 class="text-xl mb-4 font-semibold text-gray-900">
+                    <h2 class="text-md font-bold text-gray-900">
                         Ajouter un membre
                     </h2>
 
                     <!-- FORM -->
                     <form id="addStaffForm" method="POST">
-                        <div class="space-y-12">
+                        <div class="space-y-6">
 
-                            <div class="border-b border-gray-900/10 pb-12">
+                            <div class="border-b border-gray-900/10 pb-6">
                                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                                    <div class="sm:col-span-3">
-                                        <label for="names" class="block text-sm/6 font-medium text-gray-900">
+                                    <div class="col-span-3">
+                                        <label for="names" class="block text-sm font-medium text-gray-900">
                                             Nom et Prénoms</label>
-                                        <div class="mt-2">
+                                        <div class="mt-1">
                                             <input type="text" name="names" id="names" required
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                                class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#dc1919] text-sm">
                                         </div>
                                     </div>
 
-                                    <div class="sm:col-span-3">
-                                        <label for="role" class="block text-sm/6 font-medium text-gray-900">
+                                    <div class="col-span-3">
+                                        <label for="role" class="block text-sm font-medium text-gray-900">
                                             Fonction</label>
-                                        <div class="mt-2">
+                                        <div class="mt-1">
                                             <input type="text" name="role" id="role" required
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                                class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#dc1919] text-sm">
                                         </div>
                                     </div>
 
-                                    <div class="sm:col-span-6">
-                                        <label for="country"
-                                            class="block text-sm/6 font-medium text-gray-900">Pôle</label>
-                                        <div class="mt-2 grid grid-cols-1">
-                                            <select id="country" name="pole" autocomplete="country-name"
-                                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                                                <option value="IFM">IFM</option>
-                                                <option value="MCI">MCI</option>
-                                                <option value="SONORISATION">SONORISATION</option>
-                                                <option value="VVIP / AUTORITES">VVIP / AUTORITES</option>
-                                                <option value="STAFF HIMRA">STAFF HIMRA</option>
+                                    <div class="col-span-6">
+                                        <label for="pole" class="block text-sm font-medium text-gray-900">Pôle</label>
+                                        <div class="mt-1 grid grid-cols-1">
+                                            <select id="pole" name="pole"
+                                                class="col-start-1 row-start-1 w-full appearance-none rounded bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#dc1919] text-sm">
+                                                <option value="Administration VIRTUS">Administration VIRTUS</option>
+                                                <option value="Artistique">Artistique</option>
+                                                <option value="Bar et Cambuse">Bar et Cambuse</option>
+                                                <option value="Commité d'organisation">Commité d'organisation</option>
+                                                <option value="Communication">Communication</option>
+                                                <option value="Communication et Média">Communication et Média</option>
+                                                <option value="Communication Visuelle">Communication Visuelle</option>
+                                                <option value="Décoration">Décoration</option>
+                                                <option value="GI - Escorte HIMRA">GI - Escorte HIMRA</option>
+                                                <option value="Logistique">Logistique</option>
+                                                <option value="Parrains et Invités">Parrains et Invités</option>
+                                                <option value="Protocole et Acceuil">Protocole et Acceuil</option>
+                                                <option value="Régie Générale">Régie Générale</option>
+                                                <option value="Staff HIMRA">Staff HIMRA</option>
                                             </select>
                                             <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                                                 viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
@@ -142,23 +154,21 @@
 
                         </div>
 
-                        <div class="mt-6 flex items-center justify-end gap-x-6">
-                            <span class="sm:ml-3">
-                                <button type="submit" id="addStaffButton"
-                                    class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                    <svg id="addStaffLoader" aria-hidden="true" role="status"
-                                        class="inline w-4 h-4 me-3 text-white animate-spin hidden" viewBox="0 0 100 101"
-                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                            fill="#E5E7EB" />
-                                        <path
-                                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                    Enregistrer
-                                </button>
-                            </span>
+                        <div class="w-full mt-4 flex items-center justify-end gap-x-6">
+                            <button type="submit" id="addStaffButton"
+                                class="w-full inline-flex justify-center items-center rounded bg-black px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                                <svg id="addStaffLoader" aria-hidden="true" role="status"
+                                    class="inline w-4 h-4 me-3 text-white animate-spin hidden" viewBox="0 0 100 101"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                        fill="#E5E7EB" />
+                                    <path
+                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                        fill="currentColor" />
+                                </svg>
+                                Enregistrer
+                            </button>
                         </div>
                     </form>
 
@@ -167,31 +177,32 @@
             </div>
 
             <!-- LISTE -->
-            <div class="w-full border border-gray-200 shadow rounded-lg p-6 mb-4">
+            <div class="w-full bg-white opacity-85 border border-gray-200 shadow rounded-lg p-4 mb-4">
 
                 <!-- HEAD -->
                 <div class="w-full flex justify-between items-center border-b border-gray-900/10 mb-4 pb-5">
-                    <h2 class="text-xl font-semibold text-gray-900">
+
+                    <h2 class="text-md font-bold text-gray-900">
                         Liste des membres du staff
                     </h2>
 
                     <div class="sm:col-span-4">
                         <input type="text" name="staffSearch" id="staffSearch" placeholder="Rechercher..."
-                            class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-1 focus:-outline-offset-2 focus:outline-[#dc1919] text-xs">
                     </div>
 
                     <div class="flex gap-4">
                         <form id="downloadForm" enctype="multipart/form-data" method="GET"
                             action="/api/qr/generate-all">
                             <button type="submit"
-                                class="uppercase inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                Code QR
+                                class="inline-flex items-center rounded bg-black px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                Qr Codes
                             </button>
                         </form>
                         <button type="button"
                             onclick="document.getElementById('modal-dialog').classList.remove('hidden')"
-                            class="uppercase inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-                            vider la liste
+                            class="uppercase inline-flex items-center rounded bg-red-700 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                            Vider la liste
                             <svg id="emptyStaffLoader" aria-hidden="true" role="status"
                                 class="inline w-4 h-4 ml-3 text-white animate-spin hidden" viewBox="0 0 100 101"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -208,14 +219,14 @@
                 </div>
 
                 <!-- TABLE -->
-                <table id="staffTable" class="min-w-full m-2 bg-white border border-gray-300">
+                <table id="staffTable" class="min-w-full m-2 border border-gray-300">
                     <thead class="bg-gray-200">
                         <tr>
-                            <th class="px-4 py-2 text-sm border-b border-r">#</th>
-                            <th class="px-4 py-2 text-sm border-b">Qrcode ID</th>
-                            <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
-                            <th class="px-4 py-2 text-sm border-b">Pôle</th>
-                            <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                            <th class="px-4 py-2 text-xs border-b border-r">#</th>
+                            <th class="px-4 py-2 text-xs border-b">Qrcode ID</th>
+                            <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                            <th class="px-4 py-2 text-xs border-b">Pôle</th>
+                            <th class="px-4 py-2 text-xs border-b">Fonction</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -366,6 +377,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="./js/main.js"></script>
     <script src="./js/staff.js"></script>
 
 </body>

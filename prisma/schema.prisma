@@ -8,25 +8,54 @@ datasource db {
 }
 
 model Staff {
-  id     String      @id @default(cuid())
-  pseudo String
-  names  String
-  role   String
-  pole   String
-  areas  StaffArea[]
+  event   Event       @relation(fields: [eventId], references: [id])
+  id      String      @id @default(cuid())
+  areas   StaffArea[]
+  pseudo  String
+  names   String
+  role    String
+  pole    String
+  eventId String
 }
 
 model Area {
-  id    Int         @id @default(autoincrement())
-  label String
-  staff StaffArea[]
+  event   Event       @relation(fields: [eventId], references: [id])
+  id      String      @id @default(cuid())
+  staff   StaffArea[]
+  devices Device[]
+  label   String
+  eventId String
 }
 
 model StaffArea {
-  staffId String
-  areaId  Int
   staff   Staff  @relation(fields: [staffId], references: [id])
   area    Area   @relation(fields: [areaId], references: [id])
+  staffId String
+  areaId  String
 
   @@id([staffId, areaId])
+}
+
+model Device {
+  area   Area?   @relation(fields: [areaId], references: [id])
+  active Boolean @default(false)
+  id     String  @id
+  areaId String?
+}
+
+model Event {
+  id     String   @id @default(cuid())
+  date   DateTime
+  staffs Staff[]
+  areas  Area[]
+  label  String
+  cover  String
+}
+
+model Checking {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  success   Boolean
+  aera      String
+  staff     String
 }

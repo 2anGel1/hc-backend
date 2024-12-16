@@ -1,8 +1,75 @@
-import { AreaModel, StaffAreaModel, StaffModel } from "../prisma";
+import { AreaModel, CheckingModel, DeviceModel, EventModel, StaffAreaModel, StaffModel } from "../prisma";
 import { Request, Response } from "express";
 import { Staff } from "../utils/interface";
 import csvParser from "csv-parser";
 import fs from "fs";
+
+// EVENT
+
+// add event
+export const addEvent = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data && data.label && data.date && data.cover) {
+
+            await EventModel.create({
+                data: {
+                    label: data.label,
+                    cover: data.cover,
+                    date: new Date(data.date),
+                }
+            });
+
+            res.status(200).json({ message: "Évenement ajoutée avec succès" });
+
+        } else {
+            res.status(400).json({ message: 'Les datas manquent' });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// delete event
+export const deleteEvent = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.params.eventId;
+        if (id) {
+
+            await EventModel.delete({
+                where: {
+                    id
+                }
+            });
+            res.status(200).json({ message: "Évenement supprimée" });
+
+        } else {
+            res.status(400).json({ message: 'les datas sont manquantes ou incomplètes' });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la suppression des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// get all events
+export const getAllEvent = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const eventData = await EventModel.findMany();
+
+        res.status(200).json(eventData);
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
 
 
 //  STAFF
@@ -16,6 +83,22 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
 
     const filePath = req.file.path;
     const users: Staff[] = [];
+
+    const event_id = req.params.event_id;
+
+    if (!event_id) {
+        res.status(400).json({ message: "vous devez fournir un id d'évenement" });
+    }
+
+    const event = await EventModel.findUnique({
+        where: {
+            id: event_id
+        }
+    });
+
+    if (!event) {
+        res.status(400).json({ message: "Cet évenement n'existe pas" });
+    }
 
     try {
         fs.createReadStream(filePath)
@@ -42,6 +125,7 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
                     if (!existingStaff) {
                         await StaffModel.create({
                             data: {
+                                eventId: event_id,
                                 names: user.names,
                                 role: user.role,
                                 pole: user.pole,
@@ -62,8 +146,31 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
 // get all staff
 export const getAllStaff = async (req: Request, res: Response): Promise<void> => {
     try {
-        const staffData = await StaffModel.findMany();
+
+        const event_id = req.params.eventId;
+
+        if (!event_id) {
+            res.status(400).json({ message: "vous devez fournir un id d'évenement" });
+        }
+
+        const event = await EventModel.findUnique({
+            where: {
+                id: event_id
+            }
+        });
+
+        if (!event) {
+            res.status(400).json({ message: "Cet évenement n'existe pas" });
+        }
+
+        const staffData = await StaffModel.findMany({
+            where: {
+                eventId: event_id
+            }
+        });
+
         res.status(200).json(staffData);
+
     } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -73,8 +180,31 @@ export const getAllStaff = async (req: Request, res: Response): Promise<void> =>
 // delete all staff
 export const deleteAllStaff = async (req: Request, res: Response): Promise<void> => {
     try {
-        await StaffModel.deleteMany();
+
+        const event_id = req.params.eventId;
+
+        if (!event_id) {
+            res.status(400).json({ message: "Vous devez fournir un id d'évenement" });
+        }
+
+        const event = await EventModel.findUnique({
+            where: {
+                id: event_id
+            }
+        });
+
+        if (!event) {
+            res.status(400).json({ message: "Cet évenement n'existe pas" });
+        }
+
+        await StaffModel.deleteMany({
+            where: {
+                eventId: event_id
+            }
+        });
+
         res.status(200).json({ message: "Liste vidée avec succès" });
+
     } catch (error) {
         console.error('Erreur lors de la suppression des données :', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -87,11 +217,22 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
 
         const data = req.body;
 
-        if (data) {
+        if (data && data.event_id) {
+
+            const event = await EventModel.findUnique({
+                where: {
+                    id: data.event_id
+                }
+            });
+
+            if (!event) {
+                res.status(400).json({ message: "Cet évenement n'existe pas" });
+            }
 
             await StaffModel.create({
                 data: {
                     pseudo: data.names.replace(" ", "").toLowerCase(),
+                    eventId: data.event_id,
                     names: data.names,
                     role: data.role,
                     pole: data.pole,
@@ -132,6 +273,103 @@ export const deleteStaff = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
+// DEVICE
+
+// add device
+export const addDevice = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data && data.device_id && data.area_id) {
+
+            const area = await AreaModel.findUnique({
+                where: {
+                    id: data.area_id
+                }
+            });
+
+            if (!area) {
+                res.status(400).json({ ok: false, message: "Zone introuvable" });
+            }
+
+            var device = await DeviceModel.findUnique({
+                where: {
+                    id: data.device_id
+                }
+            });
+
+            if (device) {
+                res.status(400).json({ ok: false, message: "Ce terminal existe déja" });
+            }
+
+            await DeviceModel.create({
+                data: {
+                    id: data.device_id,
+                    area: data.area_id
+                }
+            });
+
+            res.status(200).json({
+                message: "Terminal ajouté avec succès",
+                zone: area,
+            });
+
+        } else {
+            res.status(400).json({ message: 'Les datas manquent' });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
+// enable/disable device
+export const toogleEnableDevice = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const data = req.body;
+
+        if (data && data.device_id && data.action) {
+
+            const device = await DeviceModel.findUnique({
+                where: {
+                    id: data.device_id
+                },
+            });
+
+            if (!device) {
+                res.status(400).json({ ok: false, message: "Utilisateur introuvable" });
+            }
+
+            const active: boolean = data.action == "enable";
+
+            await DeviceModel.update({
+                where: {
+                    id: device?.id
+                },
+                data: {
+                    active: active
+                }
+            })
+
+            res.status(200).json({
+                ok: true,
+            });
+
+        } else {
+            res.status(400).json({ ok: false, message: "le corps de la requête n'est pas correcte. device_id ou area_id est null" });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 
 // AREA
 
@@ -141,13 +379,25 @@ export const addArea = async (req: Request, res: Response): Promise<void> => {
 
         const data = req.body;
 
-        if (data && data.label) {
+        if (data && data.label && data.event_id) {
+
+            const event = await EventModel.findUnique({
+                where: {
+                    id: data.event_id
+                }
+            });
+
+            if (!event) {
+                res.status(400).json({ message: "Cet évenement n'existe pas" });
+            }
 
             await AreaModel.create({
                 data: {
-                    label: data.label
+                    label: data.label,
+                    eventId: data.event_id
                 }
             });
+
             res.status(200).json({ message: "Zone ajoutée avec succès" });
 
         } else {
@@ -169,7 +419,7 @@ export const deleteArea = async (req: Request, res: Response): Promise<void> => 
 
             await AreaModel.delete({
                 where: {
-                    id: Number(id)
+                    id
                 }
             });
             res.status(200).json({ message: "Zone supprimée" });
@@ -185,8 +435,28 @@ export const deleteArea = async (req: Request, res: Response): Promise<void> => 
 
 // all-area
 export const getAllAreas = async (req: Request, res: Response): Promise<void> => {
+
+    const event_id = req.params.eventId;
+
+    if (!event_id) {
+        res.status(400).json({ message: "Vous devez fournir un id d'évenement" });
+    }
+
+    const event = await EventModel.findUnique({
+        where: {
+            id: event_id
+        }
+    });
+
+    if (!event) {
+        res.status(400).json({ message: "Cet évenement n'existe pas" });
+    }
+
     try {
         const areas = await AreaModel.findMany({
+            where: {
+                eventId: event_id
+            },
             include: {
                 staff: {
                     include: {
@@ -210,7 +480,7 @@ export const getStaffOfAreaById = async (req: Request, res: Response): Promise<v
 
             const areas = await AreaModel.findUnique({
                 where: {
-                    id: Number(areaId)
+                    id: areaId
                 },
                 include: {
                     staff: {
@@ -301,13 +571,12 @@ export const associateStaffToArea = async (req: Request, res: Response): Promise
 
 // CHECK
 
-export const checkQrCode = async (req: Request, res: Response): Promise<void> => {
+export const checkStaffQrCode = async (req: Request, res: Response): Promise<void> => {
     try {
 
         const data = req.body;
-        console.log(data);
 
-        if (data && data.staff_id && data.area_id) {
+        if (data && data.staff_id && data.device_id) {
 
             const staff = await StaffModel.findUnique({
                 where: {
@@ -322,22 +591,39 @@ export const checkQrCode = async (req: Request, res: Response): Promise<void> =>
                 res.status(400).json({ ok: false, message: "Utilisateur introuvable" });
             }
 
-            const area = await AreaModel.findUnique({
+            const device = await DeviceModel.findUnique({
                 where: {
-                    id: Number(data.area_id)
+                    id: data.device_id,
+                    active: true,
+                },
+                include: {
+                    area: true
                 }
             });
+
+            if (!device) {
+                res.status(400).json({ ok: false, message: "Appareil introuvable ou déactivé" });
+            }
+
+            const area = device?.area
 
             if (!area) {
                 res.status(400).json({ ok: false, message: "Zone introuvable" });
             }
 
-            const staffIsPermitted = staff?.areas.find((area: any) => area.areaId == data.area_id);
-            const isPermitted = staffIsPermitted != null;
+            const staffArea = staff?.areas.find((area: any) => area.areaId == data.area_id);
+            const isPermitted = staffArea != null;
+
+            await CheckingModel.create({
+                data: {
+                    staff: staff?.names!,
+                    success: isPermitted,
+                    aera: area?.label!,
+                }
+            });
 
             res.status(200).json({
                 isPermitted: isPermitted,
-                checkHistory: [],
                 user: staff,
                 ok: true,
             });

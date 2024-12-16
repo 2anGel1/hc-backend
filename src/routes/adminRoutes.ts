@@ -1,25 +1,50 @@
-import { addStaff, deleteAllStaff, getAllStaff, getAllAreas, handleFileUploadStaff, checkQrCode, getStaffOfAreaById, associateStaffToArea, addArea, deleteArea, deleteStaff } from "../controllers/adminController";
+import {
+    handleFileUploadStaff,
+    associateStaffToArea,
+    getStaffOfAreaById,
+    toogleEnableDevice,
+    checkStaffQrCode,
+    deleteAllStaff,
+    getAllStaff,
+    getAllAreas,
+    deleteStaff,
+    getAllEvent,
+    deleteEvent,
+    deleteArea,
+    addDevice,
+    addEvent,
+    addStaff,
+    addArea,
+} from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
 const router = Router();
 
-// staff
-router.post("/excel/staff", upload.single("file"), handleFileUploadStaff);
-router.delete("/staff/delete/:staffId", deleteStaff);
-router.delete("/staff/delete-all", deleteAllStaff);
-router.get("/staff/get-all", getAllStaff);
-router.post("/staff/add", addStaff);
+// event
+router.delete("/event/delete/:eventId", deleteEvent);
+router.get("/event/get-all", getAllEvent);
+router.post("/event/add", addEvent);
 
+// staff
+router.post("/excel/staff/:eventId", upload.single("file"), handleFileUploadStaff);
+router.delete("/staff/delete-all/:eventId", deleteAllStaff);
+router.get("/staff/get-all/:eventId", getAllStaff);
+router.delete("/staff/delete/:staffId", deleteStaff);
+router.post("/staff/add", addStaff);
 
 // area
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);
 router.post("/area/associate", associateStaffToArea);
-router.delete("/area/delete/:areaId", deleteArea);
-router.get("/area/get-all", getAllAreas);
+router.delete("/area/delete", deleteArea);
+router.get("/area/get-all/:eventId", getAllAreas);
 router.post("/area/add", addArea);
 
+//device
+router.post("/device/toogle", toogleEnableDevice);
+router.post("/device/add", addDevice);
+
 // check
-router.post("/qrcode/check", checkQrCode);
+router.post("/qrcode/check", checkStaffQrCode);
 
 export default router;

@@ -1,8 +1,8 @@
 const apiUrl = {
     associateStaffToArea: '/api/admin/area/associate',
     allZoneStaff: '/api/admin/area/get-staff/',
-    allStaff: '/api/admin/staff/get-all',
-    allZone: '/api/admin/area/get-all',
+    allStaff: '/api/admin/staff/get-all/',
+    allZone: '/api/admin/area/get-all/',
 
     removeAera: '/api/admin/area/delete/',
     addAera: '/api/admin/area/add',
@@ -20,7 +20,6 @@ var allZone = new Array();
 var currentAllZoneStaff = new Array();
 var currentAllStaff = new Array();
 
-
 // GET
 
 // all satff
@@ -35,11 +34,11 @@ async function fetchAllStaffData() {
         $('#allStaffTable').append(`
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-sm border-b"></th>
-                        <th class="px-4 py-2 text-sm border-b">#</th>
-                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
-                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
-                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                        <th class="px-4 py-2 text-xs border-b"></th>
+                        <th class="px-4 py-2 text-xs border-b">#</th>
+                        <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-xs border-b">Pôle</th>
+                        <th class="px-4 py-2 text-xs border-b">Fonction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,7 +48,7 @@ async function fetchAllStaffData() {
     const table = document.querySelector('#allStaffTable');
     table.classList.add('hidden');
 
-    await fetch(apiUrl.allStaff)
+    await fetch(apiUrl.allStaff + activeEvent.id)
         .then(async (response) => {
 
             if (!response.ok) {
@@ -78,7 +77,7 @@ async function fetchAllZoneData() {
     // const tableLoader = document.getElementById('loader-table');
     // tableLoader.classList.remove('hidden');
 
-    await fetch(apiUrl.allZone)
+    await fetch(apiUrl.allZone + activeEvent.id)
         .then(async (response) => {
 
             if (!response.ok) {
@@ -89,8 +88,8 @@ async function fetchAllZoneData() {
             allZone = zonesData.map(z => z);
             if (allZone.length != 0) {
                 selectActiveZone(allZone[0]);
-                renderZones();
             }
+            renderZones();
 
         })
         .catch(error => {
@@ -114,11 +113,11 @@ async function fetchStaffZoneData(areaId) {
         $('#zoneStaffTable').append(`
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-sm border-b"></th>
-                        <th class="px-4 py-2 text-sm border-b">#</th>
-                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
-                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
-                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                        <th class="px-4 py-2 text-xs border-b"></th>
+                        <th class="px-4 py-2 text-xs border-b">#</th>
+                        <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-xs border-b">Pôle</th>
+                        <th class="px-4 py-2 text-xs border-b">Fonction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -232,11 +231,11 @@ function populateAllStaffTable(liste) {
         $('#allStaffTable').append(`
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-sm border-b"></th>
-                        <th class="px-4 py-2 text-sm border-b">#</th>
-                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
-                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
-                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                        <th class="px-4 py-2 text-xs border-b"></th>
+                        <th class="px-4 py-2 text-xs border-b">#</th>
+                        <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-xs border-b">Pôle</th>
+                        <th class="px-4 py-2 text-xs border-b">Fonction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,10 +254,10 @@ function populateAllStaffTable(liste) {
             <td class="px-4 py-2 border-b">
                 <input type="checkbox" id="check-${staff.id}" onchange="handleItemSelect('${staff.id}')">
             </td>
-            <td class="px-4 py-2 text-sm border-b">${num}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.names}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.pole}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.role}</td>
+            <td class="px-4 py-2 text-xs border-b">${num}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.names}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.pole}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.role}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -267,7 +266,7 @@ function populateAllStaffTable(liste) {
     $('#allStaffTable').DataTable({
         searching: false,
         ordering: true,
-        pageLength: 7,
+        pageLength: 5,
         paging: true,
         language: {
             lengthMenu: "",
@@ -296,11 +295,11 @@ function populateStaffZoneTable(liste = []) {
         $('#zoneStaffTable').append(`
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-sm border-b"></th>
-                        <th class="px-4 py-2 text-sm border-b">#</th>
-                        <th class="px-4 py-2 text-sm border-b">Nom et Prénoms</th>
-                        <th class="px-4 py-2 text-sm border-b">Pôle</th>
-                        <th class="px-4 py-2 text-sm border-b">Fonction</th>
+                        <th class="px-4 py-2 text-xs border-b"></th>
+                        <th class="px-4 py-2 text-xs border-b">#</th>
+                        <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                        <th class="px-4 py-2 text-xs border-b">Pôle</th>
+                        <th class="px-4 py-2 text-xs border-b">Fonction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -319,10 +318,10 @@ function populateStaffZoneTable(liste = []) {
         <td class="px-4 py-2 border-b">
                 <input type="checkbox" id="check-ds-${staff.id}" onchange="handleItemSelect2('${staff.id}')">
             </td>
-            <td class="px-4 py-2 text-sm border-b">${num}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.names}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.pole}</td>
-            <td class="px-4 py-2 text-sm border-b">${staff.role}</td>
+            <td class="px-4 py-2 text-xs border-b">${num}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.names}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.pole}</td>
+            <td class="px-4 py-2 text-xs border-b">${staff.role}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -330,7 +329,7 @@ function populateStaffZoneTable(liste = []) {
     $('#zoneStaffTable').DataTable({
         searching: false,
         ordering: true,
-        pageLength: 7,
+        pageLength: 5,
         paging: true,
         language: {
             lengthMenu: "",
@@ -361,10 +360,10 @@ function renderZones() {
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
-    removeBtn.className = `px-4 py-2 text-sm font-bold
-        hover:bg-red-500 hover:text-white
+    removeBtn.className = `px-4 py-2 text-xs font-bold
+        hover:bg-[#dc1919] hover:text-white
         text-gray-900 border-gray-200
-        border uppercase rounded-s-lg`;
+        border uppercase rounded-s`;
 
     removeBtn.textContent = "-";
     removeBtn.addEventListener("click", () => {
@@ -376,25 +375,26 @@ function renderZones() {
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `px-4 py-2 text-sm font-medium border uppercase
-            ${zone.id === activeZone.id ? 'text-blue-700 bg-gray-100' : 'bg-white text-gray-900 border-gray-200'} 
-            hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700`;
+        button.className = `px-4 py-2 text-xs border uppercase
+            ${zone.id === activeZone.id ? 'text-white bg-gray-700 font-bold' : 'bg-white text-gray-900 border-gray-200'} 
+            hover:bg-gray-700 hover:text-white hover:font-bold`;
 
         button.textContent = zone.label;
         button.addEventListener("click", () => {
             selectActiveZone(zone);
             renderZones();
-        })
+        });
 
         zonesContainer.appendChild(button);
+
     });
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
-    addBtn.className = `px-4 py-2 text-sm font-bold
-        hover:bg-blue-500 hover:text-white
+    addBtn.className = `px-4 py-2 text-xs font-bold
+        hover:bg-black hover:text-white
         text-gray-900 border-gray-200
-        border uppercase rounded-e-lg`;
+        border uppercase rounded-e`;
 
     addBtn.textContent = "+";
     addBtn.addEventListener("click", () => {
@@ -511,6 +511,7 @@ document.querySelector('#addAreaForm').addEventListener('submit', function (even
     loader.classList.remove('hidden');
 
     const formData = new FormData(this);
+    formData.append("event_id", activeEvent.id);
     const action = apiUrl.addAera;
 
     const data = Object.fromEntries(formData.entries());
