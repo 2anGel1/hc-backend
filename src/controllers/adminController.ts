@@ -310,7 +310,7 @@ export const addDevice = async (req: Request, res: Response): Promise<void> => {
             await DeviceModel.create({
                 data: {
                     id: data.device_id,
-                    area: data.area_id
+                    areaId: data.area_id
                 }
             });
 
