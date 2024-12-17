@@ -1,5 +1,6 @@
 import { Router, Response, Request } from "express";
 import { AreaModel, StaffModel } from "../prisma";
+const { format } = require("@fast-csv/format");
 import archiver from "archiver";
 import QRCode from "qrcode";
 import path from "path";
@@ -7,7 +8,7 @@ import fs from "fs";
 
 const router = Router();
 
-router.get("/generate-all", async (req: Request, res: Response) => {
+router.get("/generate-all/:eventId", async (req: Request, res: Response) => {
 
     const qrDir = path.join(__dirname, "../../uploads");
     const zipFilePath = path.join(__dirname, "../../uploads/qrcodes.zip");
@@ -19,9 +20,13 @@ router.get("/generate-all", async (req: Request, res: Response) => {
 
     try {
         // Generate QR codes for all staff members
-        const staffMembers = await StaffModel.findMany();
+        const staffMembers = await StaffModel.findMany({
+            where: {
+                eventId: req.params.eventId,
+            }
+        });
         for (const member of staffMembers) {
-            const qrName = member.names + "_" + member.id + ".png";
+            const qrName = member.id + ".png";
             const qrPath = path.join(qrDir, qrName);
             await QRCode.toFile(qrPath, member.id);
         }
@@ -160,6 +165,51 @@ router.get("/generate-one/:staffId", async (req: Request, res: Response): Promis
     } catch (error) {
         console.error("Error generating QR code:", error);
         res.status(500).json({ error: "Failed to generate QR code" });
+    }
+
+});
+
+router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => {
+
+    try {
+
+        const staffMembers = await StaffModel.findMany({
+            where: {
+                eventId: req.params.eventId,
+            }
+        });
+
+        const filePath = path.join(__dirname, "../../uploads/data.csv");
+        const writeStream = fs.createWriteStream(filePath);
+
+        // Mapping des données avec des en-têtes personnalisés
+        const formattedData = staffMembers.map((row) => ({
+            "NOMS": row.names,
+            "FONCTION": row.role,
+            "POLE": row.pole,
+            "QRCODE": row.id + ".png",
+        }));
+
+        // Création du fichier CSV avec fast-csv
+        const csvStream = format({ headers: true, delimiter: ";" }); // Séparateur ";"
+        csvStream.pipe(writeStream);
+        formattedData.forEach((row) => csvStream.write(row));
+        csvStream.end();
+
+        writeStream.on("finish", () => {
+            // Envoie le fichier au client
+            res.download(filePath, "LISTE.csv", (err) => {
+                if (err) {
+                    console.error("Erreur lors du téléchargement :", err);
+                    res.status(500).send("Erreur lors de la génération du fichier CSV.");
+                }
+                // Supprime le fichier temporaire après téléchargement
+                fs.unlinkSync(filePath);
+            });
+        });
+    } catch (error) {
+        console.error("Erreur :", error);
+        res.status(500).send("Erreur lors de la génération du fichier CSV.");
     }
 
 });

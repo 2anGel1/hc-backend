@@ -12,8 +12,8 @@ var currentAllEvents = new Array();
 // all satff
 async function fetchAllEvents() {
 
-    // const loader = document.getElementById('loaderAllStaff');
-    // loader.classList.remove('hidden');
+    const loader = document.getElementById('allEventsLoader');
+    loader.classList.remove('hidden');
 
     await fetch(apiUrl.getAllEvent)
         .then(async (response) => {
@@ -23,7 +23,7 @@ async function fetchAllEvents() {
             }
 
             const eventData = await response.json();
-            console.log(eventData);
+            // console.log(eventData);
 
             currentAllEvents = eventData.map((staff) => staff);
             renderEvents();
@@ -34,7 +34,7 @@ async function fetchAllEvents() {
             alert('Impossible de récupérer les données.');
         })
         .finally(() => {
-            // loader.classList.add('hidden');
+            loader.classList.add('hidden');
         });
 
 }
@@ -104,8 +104,9 @@ async function renderEvents() {
             eventsContainer.appendChild(container);
         })
 
-
     );
+
+    eventsContainer.classList.remove('hidden');
 }
 
 function formatDate(isoDate) {

@@ -84,7 +84,7 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
     const filePath = req.file.path;
     const users: Staff[] = [];
 
-    const event_id = req.params.event_id;
+    const event_id = req.params.eventId;
 
     if (!event_id) {
         res.status(400).json({ message: "vous devez fournir un id d'évenement" });
@@ -104,13 +104,17 @@ export const handleFileUploadStaff = async (req: Request, res: Response): Promis
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on("data", async (row) => {
-                const trueRow = row["PSEUDO;FONCTION;POLES"].toString().split(";");
-                // console.log(trueRow);
-                users.push({
-                    names: trueRow[0],
-                    role: trueRow[1],
-                    pole: trueRow[2],
-                });
+
+                const ff = Object.values(row)[0];
+                if (ff && ff.toString() != "\n") {
+                    const gg = ff.toString().split(";");
+                    users.push({
+                        names: gg[0],
+                        role: gg[1],
+                        pole: gg[2],
+
+                    });
+                }
 
             })
             .on("end", async () => {

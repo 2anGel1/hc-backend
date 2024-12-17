@@ -1,7 +1,8 @@
 const apiUrl = {
-    deleteAllStaff: '/api/admin/staff/delete-all',
+    deleteAllStaff: '/api/admin/staff/delete-all/',
     downloadStaffQrcode: '/api/qr/generate-one/',
-    uploadStaffExcel: '/api/admin/excel/staff',
+    uploadStaffExcel: '/api/admin/excel/staff/',
+    donwloadListe: '/api/qr/download-all-csv/',
     removeStaff: '/api/admin/staff/delete/',
     allStaff: '/api/admin/staff/get-all/',
     getStaffQrcode: '/api/qr/get-one/',
@@ -183,6 +184,20 @@ document.querySelector('#donwloadSatffQrButton').addEventListener('click', async
 
 });
 
+document.querySelector('#donwloadStaffQrcodesButton').addEventListener('click', async function () {
+
+    const url = "http://localhost:8000/api/qr/generate-all/" + activeEvent.id;
+    window.open(url, "_blank");
+
+});
+
+document.querySelector('#donwloadSaffListeButton').addEventListener('click', async function () {
+
+    const url = "http://localhost:8000" + apiUrl.donwloadListe + activeEvent.id;
+    window.open(url, "_blank");
+
+});
+
 document.querySelector('#uploadStaffForm').addEventListener('submit', function (event) {
 
     event.preventDefault();
@@ -192,7 +207,7 @@ document.querySelector('#uploadStaffForm').addEventListener('submit', function (
     loader.classList.remove('hidden');
 
     const formData = new FormData(this);
-    const action = apiUrl.uploadStaffExcel;
+    const action = apiUrl.uploadStaffExcel + activeEvent.id;
 
     fetch(action, {
         method: 'POST',
@@ -220,13 +235,13 @@ document.querySelector('#uploadStaffForm').addEventListener('submit', function (
 
 document.querySelector('#confirmModalButton').addEventListener('click', function () {
 
-    const confirmModal = document.getElementById("modal-dialog").classList.add('hidden');
+    document.getElementById("emptyListeModal").classList.add('hidden');
 
     const loader = document.getElementById('emptyStaffLoader');
 
     loader.classList.remove('hidden');
 
-    const action = apiUrl.deleteAllStaff;
+    const action = apiUrl.deleteAllStaff + activeEvent.id;
 
     fetch(action, {
         method: 'DELETE',

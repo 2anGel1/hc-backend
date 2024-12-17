@@ -27,7 +27,7 @@
             "></div>
 
             <!-- CONTENT -->
-            <div class="w-[50%] h-[100vh] bg-white shadow">
+            <div class="w-[50%] h-[100vh] bg-white shadow overflow-y-auto">
 
                 <!-- NAVBAR -->
                 <nav class="border-gray-200 border-gray-200 border-b">
@@ -44,33 +44,16 @@
                 </nav>
 
                 <!-- LISTE -->
-                <section id="events-container" class="w-full flex flex-col gap-4 p-2">
-                    
-                    <!-- <div class="w-full h-[150px] border border-gray-200 rounded-lg shadow" style="
-                        background-image: url('https://cdn.tikerama.com/images/0YVvifrt1BFEEcg15UG3FudgFYu0e6GVTU0gbUJC.jpg');
-                        background-size: contain;
-                        ">
-
-                        <div class="w-full h-[150px] rounded-lg bg-black opacity-75 p-6">
-
-                            <h1 class="text-xl text-white font-bold">Concert SDM</h1>
-                            <p class="text-xs text-white underline font-semibold">21 Décembre 2024</p>
-
-                            <div class="w-full flex justify-between mt-6 opacity-100">
-                                <button type="submit" id="addStaffButton"
-                                    class="inline-flex justify-center items-center rounded bg-gray-900 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
-                                    Gérer l'évenement
-                                </button>
-                                <button type="submit" id="addStaffButton"
-                                    class="inline-flex justify-center items-center rounded bg-red-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
-                                    Supprimer
-                                </button>
-                            </div>
-                        </div>
-
-                    </div> -->
-
+                <section id="events-container" class="hidden w-full flex flex-col gap-4 p-2">
                 </section>
+
+                <!-- SKELETON -->
+                <div role="status" class="w-full animate-pulse" id="allEventsLoader">
+                    <div class="w-full flex flex-col gap-4 p-2">
+                        <div class="w-full h-[150px] border border-gray-200 bg-gray-200 rounded-lg shadow"></div>
+                        <div class="w-full h-[150px] border border-gray-200 bg-gray-200 rounded-lg shadow"></div>
+                    </div>
+                </div>
 
             </div>
 
