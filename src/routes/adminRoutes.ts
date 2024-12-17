@@ -6,6 +6,7 @@ import {
     toogleEnableDevice,
     checkStaffQrCode,
     deleteAllStaff,
+    getDeviceState,
     getAllStaff,
     getAllAreas,
     deleteStaff,
@@ -43,6 +44,7 @@ router.get("/area/get-all/:eventId", getAllAreas);
 router.post("/area/add", addArea);
 
 //device
+router.get("/device/state/:deviceId", getDeviceState);
 router.post("/device/toogle", toogleEnableDevice);
 router.post("/device/add", addDevice);
 

@@ -56,6 +56,7 @@ model Checking {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   success   Boolean
+  device    String
   aera      String
   staff     String
 }

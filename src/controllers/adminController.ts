@@ -330,6 +330,39 @@ export const addDevice = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+// get state of a device
+export const getDeviceState = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const deviceId = req.params.deviceId;
+
+        if (deviceId) {
+
+            const device = await DeviceModel.findUnique({
+                where: {
+                    id: deviceId
+                },
+            });
+
+            if (!device) {
+                res.status(400).json({ ok: false, message: "Terminal introuvable" });
+            }
+
+            res.status(200).json({
+                actif: device?.active,
+            });
+
+        } else {
+            res.status(400).json({ ok: false, message: "Le parametre deviceId manque dans la requête" });
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 // enable/disable device
 export const toogleEnableDevice = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -630,8 +663,8 @@ export const checkStaffQrCode = async (req: Request, res: Response): Promise<voi
                 }
             });
 
-            if (!device) {
-                res.status(400).json({ ok: false, message: "Appareil introuvable ou déactivé" });
+            if (!device || !device.active) {
+                res.status(400).json({ ok: false, message: "Terminal introuvable ou inactif" });
             }
 
             const area = device?.area
@@ -640,7 +673,7 @@ export const checkStaffQrCode = async (req: Request, res: Response): Promise<voi
                 res.status(400).json({ ok: false, message: "Zone introuvable" });
             }
 
-            const staffArea = staff?.areas.find((area: any) => area.areaId == data.area_id);
+            const staffArea = staff?.areas.find((sArea: any) => sArea.areaId == area?.id);
             const isPermitted = staffArea != null;
 
             await CheckingModel.create({
@@ -648,6 +681,7 @@ export const checkStaffQrCode = async (req: Request, res: Response): Promise<voi
                     staff: staff?.names!,
                     success: isPermitted,
                     aera: area?.label!,
+                    device: device?.id!,
                 }
             });
 
