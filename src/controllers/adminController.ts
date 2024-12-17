@@ -630,9 +630,44 @@ export const associateStaffToArea = async (req: Request, res: Response): Promise
     }
 }
 
+// CHECKINGS
+export const getAllCheckings = async (req: Request, res: Response): Promise<void> => {
+
+    const event_id = req.params.eventId;
+
+    if (!event_id) {
+        res.status(400).json({ message: "Vous devez fournir un id d'évenement" });
+    }
+
+    const event = await EventModel.findUnique({
+        where: {
+            id: event_id
+        }
+    });
+
+    if (!event) {
+        res.status(400).json({ message: "Cet évenement n'existe pas" });
+    }
+
+    try {
+        const checkings = await CheckingModel.findMany({
+            where: {
+                eventId: event_id
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+        res.status(200).json(checkings);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
 
 // CHECK
 
+// check staff appartenance to an area
 export const checkStaffQrCode = async (req: Request, res: Response): Promise<void> => {
     try {
 
@@ -678,6 +713,7 @@ export const checkStaffQrCode = async (req: Request, res: Response): Promise<voi
 
             await CheckingModel.create({
                 data: {
+                    eventId: staff?.eventId,
                     staff: staff?.names!,
                     success: isPermitted,
                     aera: area?.label!,

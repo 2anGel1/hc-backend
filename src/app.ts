@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
 app.get("/", (req: Request, res: Response): void => {
-  res.send("Everything is okay");
+  res.redirect(301, "/event.html");
 });
 // app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);

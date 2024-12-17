@@ -58,7 +58,100 @@
 
         <!-- MAIN -->
 
-        <div class="w-full flex flex-col gap-4 px-4 py-6">
+        <div class="w-full flex flex-col px-12 py-2" style="background-image: url('./assets/LOGO_VIRTUS/Sanstitre-1-02-removebg(1).png');
+        background-position: center;
+        background-repeat: repeat;
+        background-size: contain;
+        ">
+
+            <div class="w-full flex justify-center flex-row-reverse gap-2">
+
+                <div
+                    class="min-h-[400px] bg-white opacity-85 flex-1 border border-gray-200 rounded-lg shadow px-6 py-2">
+
+                    <!-- TABLE -->
+                    <table id="historyTable" class="min-w-full bg-white border border-gray-300">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="px-4 py-2 text-xs border-b">#</th>
+                                <th class="px-4 py-2 text-xs border-b">Id Terminal</th>
+                                <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
+                                <th class="px-4 py-2 text-xs border-b">Zone </th>
+                                <th class="px-4 py-2 text-xs border-b">Status</th>
+                                <th class="px-4 py-2 text-xs border-b">Heure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <!-- SKELETON -->
+                    <div role="status" class="w-full animate-pulse mt-2" id="loaderHistory">
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -67,7 +160,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="./js/main.js"></script>
-    <!-- <script src="./js/terminal.js"></script> -->
+    <script src="./js/history.js"></script>
     <!-- <script src="./obfuscated/main.bundle.js"></script> -->
     <!-- <script src="./obfuscated/history.bundle.js"></script> -->
 

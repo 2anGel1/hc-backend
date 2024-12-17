@@ -28,6 +28,10 @@ apiUrl = {
     toogleDevice: '/api/admin/device/toogle',
     allDevice: '/api/admin/area/get-device/',
     getAreaQrcode: '/api/qr/area/get-one/',
+
+    // history
+    getAllHistory: "/api/admin/checkings/get-all/",
+
 }
 
 activeEvent = null
@@ -39,6 +43,17 @@ formatDate = function (isoDate) {
     const formattedDate = new Intl.DateTimeFormat("fr-FR", options).format(date);
 
     return formattedDate;
+}
+
+formatHour = function (isoDate) {
+    const date = new Date(isoDate);
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    const formattedTime = `${hours}h${minutes}`;
+
+    return formattedTime;
 }
 
 function init() {

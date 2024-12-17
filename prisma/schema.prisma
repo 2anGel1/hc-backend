@@ -44,19 +44,22 @@ model Device {
 }
 
 model Event {
-  id     String   @id @default(cuid())
-  date   DateTime
-  staffs Staff[]
-  areas  Area[]
-  label  String
-  cover  String
+  id        String     @id @default(cuid())
+  checkings Checking[]
+  date      DateTime
+  staffs    Staff[]
+  areas     Area[]
+  label     String
+  cover     String
 }
 
 model Checking {
+  event     Event    @relation(fields: [eventId], references: [id])
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   success   Boolean
   device    String
   aera      String
   staff     String
+  eventId   String @default("abcdefgh12345")
 }
