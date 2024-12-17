@@ -5,46 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./styles.css" rel="stylesheet">
-    <title>Gestion Staff</title>
+    <title>VIRTUS E.M</title>
 
+    <link rel="shortcut icon" href="./assets/LOGO_VIRTUS/LOGO_OFFICIEL.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
+    <!-- #dc1919 -->
 </head>
 
 <body class="min-h-full">
 
     <nav class="bg-gray-800">
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div class="relative flex h-16 items-center justify-between">
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="hidden sm:ml-6 sm:block">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="relative flex items-center justify-between">
+                <div class="flex flex-1 items-center items-stretch justify-between">
+                    <div class="ml-6 block">
                         <div class="flex space-x-4">
+                            <a href="/event.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Accueil
+                            </a>
                             <a href="/staff.html"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Membres du staff
                             </a>
                             <a href="/zone.html"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                                Zone d'accès
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                                aria-current="page">
+                                Zones d'accès
                             </a>
-                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                            <a href="/terminal.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Terminaux
+                            </a>
+                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white"
                                 aria-current="page">
                                 Historique
                             </a>
-
                         </div>
                     </div>
+
                 </div>
+                <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="50" height="50" alt="">
             </div>
         </div>
     </nav>
 
     <header class="bg-white shadow">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-                Historique des checkings
-            </h1>
-        </div>
+
     </header>
 
     <main>
@@ -59,7 +66,10 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <!-- <script src="./js/zone.js"></script> -->
+    <script src="./js/main.js"></script>
+    <script src="./js/terminal.js"></script>
+    <!-- <script src="./obfuscated/main.bundle.js"></script> -->
+    <!-- <script src="./obfuscated/history.bundle.js"></script> -->
 
 </body>
 

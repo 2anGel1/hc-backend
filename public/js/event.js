@@ -1,10 +1,3 @@
-
-const apiUrl = {
-    getAllEvent: "/api/admin/event/get-all",
-    removeEvent: "/api/admin/event/delete/",
-    addEvent: "/api/admin/event/add",
-}
-
 var currentAllEvents = new Array();
 
 // GET
@@ -80,7 +73,9 @@ async function renderEvents() {
                 const jsonEvent = JSON.stringify(event);
                 localStorage.setItem("ACTIVE_EVENT", jsonEvent);
 
-                window.location.href = "/staff.html";
+                setTimeout(() => {
+                    window.location.href = "/staff.html";
+                }, 200);
             });
 
             const deleteButton = document.createElement('button');
@@ -107,17 +102,6 @@ async function renderEvents() {
     );
 
     eventsContainer.classList.remove('hidden');
-}
-
-function formatDate(isoDate) {
-    // Convertir en objet Date
-    const date = new Date(isoDate);
-
-    // Formater avec Intl.DateTimeFormat
-    const options = { day: "2-digit", month: "long", year: "numeric" };
-    const formattedDate = new Intl.DateTimeFormat("fr-FR", options).format(date);
-
-    return formattedDate;
 }
 
 async function deleteEvent(id) {

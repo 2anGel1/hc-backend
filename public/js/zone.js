@@ -1,13 +1,3 @@
-const apiUrl = {
-    associateStaffToArea: '/api/admin/area/associate',
-    allZoneStaff: '/api/admin/area/get-staff/',
-    allStaff: '/api/admin/staff/get-all/',
-    allZone: '/api/admin/area/get-all/',
-
-    removeAera: '/api/admin/area/delete/',
-    addAera: '/api/admin/area/add',
-};
-
 const selectedZoneStaff = new Set();
 const selectedStaff = new Set();
 
@@ -320,7 +310,7 @@ function populateStaffZoneTable(liste = []) {
             <td class="px-4 py-2 text-xs border-b">${staff.pole}</td>
             <td class="px-4 py-2 text-xs border-b">${staff.role}</td>
         `;
-        tableBody.appendChild(row);
+        tableBody.appendChild(row); 
     });
 
     $('#zoneStaffTable').DataTable({

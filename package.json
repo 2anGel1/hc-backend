@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "build-webpack": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +44,7 @@
     "@types/qrcode": "^1.5.5",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
+    "javascript-obfuscator": "^4.1.1",
     "nodemon": "^3.1.7",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",

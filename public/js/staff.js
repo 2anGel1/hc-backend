@@ -1,14 +1,3 @@
-const apiUrl = {
-    deleteAllStaff: '/api/admin/staff/delete-all/',
-    downloadStaffQrcode: '/api/qr/generate-one/',
-    uploadStaffExcel: '/api/admin/excel/staff/',
-    donwloadListe: '/api/qr/download-all-csv/',
-    removeStaff: '/api/admin/staff/delete/',
-    allStaff: '/api/admin/staff/get-all/',
-    getStaffQrcode: '/api/qr/get-one/',
-    addStaff: '/api/admin/staff/add',
-};
-
 var currentAllStaff = new Array();
 var allStaff = new Array();
 var currentStaff = {};
@@ -22,7 +11,7 @@ async function fetchStaffData() {
 
     const table = document.querySelector('#staffTable');
     table.classList.add('hidden');
-
+    
     await fetch(apiUrl.allStaff + activeEvent.id)
         .then(async (response) => {
 
@@ -186,14 +175,14 @@ document.querySelector('#donwloadSatffQrButton').addEventListener('click', async
 
 document.querySelector('#donwloadStaffQrcodesButton').addEventListener('click', async function () {
 
-    const url = "http://localhost:8000/api/qr/generate-all/" + activeEvent.id;
+    const url = "/api/qr/generate-all/" + activeEvent.id;
     window.open(url, "_blank");
 
 });
 
 document.querySelector('#donwloadSaffListeButton').addEventListener('click', async function () {
 
-    const url = "http://localhost:8000" + apiUrl.donwloadListe + activeEvent.id;
+    const url = apiUrl.donwloadListe + activeEvent.id;
     window.open(url, "_blank");
 
 });

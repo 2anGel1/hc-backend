@@ -1,10 +1,3 @@
-const apiUrl = {
-    toogleDevice: '/api/admin/device/toogle',
-    allDevice: '/api/admin/area/get-device/',
-    getAreaQrcode: '/api/qr/area/get-one/',
-    allZone: '/api/admin/area/get-all/',
-};
-
 var activeZone = { label: "" };
 var allDevice = new Array();
 var allZone = new Array();
