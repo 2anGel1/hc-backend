@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles.css" rel="stylesheet">
+    <title>VIRTUS E.M</title>
+
+    <link rel="shortcut icon" href="./assets/LOGO_VIRTUS/LOGO_OFFICIEL.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- #dc1919 -->
+</head>
+
+<body class="min-h-full">
+
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-6">
+            <div class="relative flex items-center justify-between">
+                <div class="flex flex-1 items-center items-stretch justify-between">
+                    <div class="ml-6 block">
+                        <div class="flex space-x-4">
+                            <a href="/event.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Accueil
+                            </a>
+                            <a href="/staff.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Membres du staff
+                            </a>
+                            <a href="/zone.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                                aria-current="page">
+                                Zones d'accès
+                            </a>
+                            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white"
+                                aria-current="page">
+                                Terminaux
+                            </a>
+                            <a href="/history.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Historique
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="50" height="50" alt="">
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white shadow">
+
+    </header>
+
+    <main>
+
+        <!-- MAIN -->
+
+        <div class="w-full flex flex-col px-12 py-2" style="background-image: url('./assets/LOGO_VIRTUS/Sanstitre-1-02-removebg(1).png');
+         background-position: center;
+         background-repeat: repeat;
+         background-size: contain;
+         ">
+
+            <!-- ZONES -->
+            <div class="flex justify-between items-center mb-2">
+                <div id="zones-container" role="group">
+                    <div role="status" class="max-w-sm animate-pulse">
+                        <div class="h-10 bg-gray-200 rounded w-80"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center flex-row-reverse gap-2">
+
+                <!-- DEVICES -->
+                <div class="min-h-[400px] bg-white opacity-85 flex-1 border border-gray-200 rounded-lg shadow p-6">
+
+                    <!-- TABLE -->
+                    <table id="deviceTable" class="hidden min-w-full m-2 bg-white border border-gray-300">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="px-4 py-2 text-xs border-b">#</th>
+                                <th class="px-4 py-2 text-xs border-b">Identifiant</th>
+                                <th class="px-4 py-2 text-xs border-b">Status</th>
+                                <th class="px-4 py-2 text-xs border-b">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <!-- SKELETON -->
+                    <div role="status" class="w-full animate-pulse" id="loaderAllDevice">
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                        <div class="w-full flex gap-1 mb-2">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- AREA CODE QR -->
+                <div
+                    class="min-h-[300px] flex items-center bg-white opacity-85 border border-gray-200 rounded-lg shadow p-6">
+
+                    <img src="" class="hidden" width="200" height="200" id="areaQrCode" alt="qrcode">
+
+                    <!-- SKELETON -->
+                    <div role="status" class="w-full flex flex-col gap-2 justify-center items-center animate-pulse"
+                        id="loaderZoneQrCode">
+                        <div class="h-[200px] w-[200px] bg-gray-200 rounded"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- MODAL -->
+
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/terminal.js"></script>
+
+</body>
+
+
+</html>

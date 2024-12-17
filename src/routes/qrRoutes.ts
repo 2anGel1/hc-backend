@@ -1,5 +1,5 @@
 import { Router, Response, Request } from "express";
-import { StaffModel } from "../prisma";
+import { AreaModel, StaffModel } from "../prisma";
 import archiver from "archiver";
 import QRCode from "qrcode";
 import path from "path";
@@ -81,6 +81,35 @@ router.get("/get-one/:staffId", async (req: Request, res: Response): Promise<voi
 
         // Générer le QR code en base64
         const qrCodeBase64 = await QRCode.toDataURL(member.id);
+
+        // Renvoyer la page HTML avec le QR code
+        res.status(200).json(qrCodeBase64);
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+        res.status(500).json({ error: "Failed to generate QR code" });
+    }
+});
+
+router.get("/area/get-one/:areaId", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const areaId = req.params.areaId;
+
+        if (!areaId) {
+            res.status(400).json({ error: "Aread ID is required" });
+            return;
+        }
+
+        const area = await AreaModel.findUnique({
+            where: { id: areaId },
+        });
+
+        if (!area) {
+            res.status(404).json({ error: "Area area not found" });
+            return;
+        }
+
+        // Générer le QR code en base64
+        const qrCodeBase64 = await QRCode.toDataURL(area.id);
 
         // Renvoyer la page HTML avec le QR code
         res.status(200).json(qrCodeBase64);

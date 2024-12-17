@@ -74,9 +74,6 @@ async function fetchAllStaffData() {
 // all zone
 async function fetchAllZoneData() {
 
-    // const tableLoader = document.getElementById('loader-table');
-    // tableLoader.classList.remove('hidden');
-
     await fetch(apiUrl.allZone + activeEvent.id)
         .then(async (response) => {
 

@@ -1,5 +1,6 @@
 import {
     handleFileUploadStaff,
+    getDevicesOfAreaById,
     associateStaffToArea,
     getStaffOfAreaById,
     toogleEnableDevice,
@@ -34,9 +35,10 @@ router.delete("/staff/delete/:staffId", deleteStaff);
 router.post("/staff/add", addStaff);
 
 // area
+router.get("/area/get-device/:areaId", getDevicesOfAreaById);
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);
 router.post("/area/associate", associateStaffToArea);
-router.delete("/area/delete", deleteArea);
+router.delete("/area/delete/:areaId", deleteArea);
 router.get("/area/get-all/:eventId", getAllAreas);
 router.post("/area/add", addArea);
 

@@ -32,6 +32,10 @@
                                 class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Zones d'accès
                             </a>
+                            <a href="/terminal.html"
+                                class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                                Terminaux
+                            </a>
                             <a href="/history.html"
                                 class="rounded-md px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                                 Historique
@@ -191,12 +195,28 @@
                             class="block w-full rounded bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-1 focus:-outline-offset-2 focus:outline-[#dc1919] text-xs">
                     </div>
 
-                    <div class="flex gap-4">
-                        <form id="downloadForm" enctype="multipart/form-data" method="GET"
-                            action="/api/qr/generate-all">
+                    <div class="flex gap-2">
+                        <form enctype="multipart/form-data" method="GET" action="/api/qr/generate-all">
                             <button type="submit"
                                 class="inline-flex items-center rounded bg-black px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                Qr Codes
+                                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
+                                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
+                                </svg>
+                            </button>
+                        </form>
+                        <form enctype="multipart/form-data" method="GET" action="/api/qr/generate-all">
+                            <button type="submit"
+                                class="inline-flex items-center rounded bg-black px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
+                                </svg>
                             </button>
                         </form>
                         <button type="button"

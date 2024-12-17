@@ -500,6 +500,31 @@ export const getStaffOfAreaById = async (req: Request, res: Response): Promise<v
     }
 }
 
+// all staff-area
+export const getDevicesOfAreaById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const areaId = req.params.areaId
+        if (areaId) {
+
+            const area = await AreaModel.findUnique({
+                where: {
+                    id: areaId
+                },
+                include: {
+                    devices: true
+                }
+            });
+
+            const devices = area?.devices
+            res.status(200).json(devices);
+
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 // associate/disossiate
 export const associateStaffToArea = async (req: Request, res: Response): Promise<void> => {
     try {

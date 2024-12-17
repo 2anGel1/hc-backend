@@ -93,7 +93,8 @@ async function populateTable(liste) {
 
                 if (document.getElementById('modalStaffRole'))
                     document.getElementById('modalStaffRole').textContent = staff.role;
-            })
+            });
+
             num += 1;
             row.innerHTML = `
                 <td class="px-4 py-2 text-sm text-center border-b border-r">${num}</td>
