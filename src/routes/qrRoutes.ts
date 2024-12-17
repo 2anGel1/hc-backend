@@ -173,6 +173,12 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
 
     try {
 
+        const uploadsDir = path.join(__dirname, "../../uploads");
+
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir);
+        }
+
         const staffMembers = await StaffModel.findMany({
             where: {
                 eventId: req.params.eventId,
@@ -180,9 +186,11 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
         });
 
         const filePath = path.join(__dirname, "../../uploads/data.csv");
+
         const writeStream = fs.createWriteStream(filePath);
 
         // Mapping des données avec des en-têtes personnalisés
+
         const formattedData = staffMembers.map((row) => ({
             "NOMS": row.names,
             "FONCTION": row.role,

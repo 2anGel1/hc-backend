@@ -692,7 +692,7 @@ export const checkStaffQrCode = async (req: Request, res: Response): Promise<voi
             });
 
         } else {
-            res.status(400).json({ ok: false, message: "le corps de la requête n'est pas correcte. staff_id ou area_id est null" });
+            res.status(400).json({ ok: false, message: "le corps de la requête n'est pas correcte. staff_id ou device_id est null" });
         }
 
 
