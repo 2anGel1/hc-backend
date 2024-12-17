@@ -187,7 +187,8 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
 
         const filePath = path.join(__dirname, "../../uploads/data.csv");
 
-        const writeStream = fs.createWriteStream(filePath);
+        const writeStream = fs.createWriteStream(filePath, { encoding: "utf8" });
+        writeStream.write("\uFEFF");
 
         // Mapping des données avec des en-têtes personnalisés
 
