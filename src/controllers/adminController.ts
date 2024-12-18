@@ -330,6 +330,28 @@ export const addDevice = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+// delete device
+export const deleteDevice = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.params.deviceId;
+        if (id) {
+
+            await DeviceModel.delete({
+                where: {
+                    id
+                }
+            });
+            res.status(200).json({ message: "Terminal supprimée" });
+
+        } else {
+            res.status(400).json({ message: 'les datas sont manquantes ou incomplètes' });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la suppression des données :', error);
+        res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+}
+
 // get state of a device
 export const getDeviceState = async (req: Request, res: Response): Promise<void> => {
     try {

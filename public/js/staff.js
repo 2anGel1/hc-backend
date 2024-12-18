@@ -191,13 +191,11 @@ document.querySelector('#uploadStaffForm').addEventListener('submit', function (
 
     event.preventDefault();
 
-    const loader = document.getElementById('uploadStaffLoader');
-
-    loader.classList.remove('hidden');
-
+    
     const formData = new FormData(this);
     const action = apiUrl.uploadStaffExcel + activeEvent.id;
-
+    
+    startLoader();
     fetch(action, {
         method: 'POST',
         body: formData,
@@ -206,18 +204,18 @@ document.querySelector('#uploadStaffForm').addEventListener('submit', function (
 
             if (response.ok) {
                 alert('Fichier importé avec succès !');
-                window.location.reload(true);
+                // window.location.reload(true);
+                fetchStaffData();
             } else {
                 alert('Erreur lors de l\'importation.');
             }
 
         })
         .catch(error => {
-            loader.classList.add('hidden');
             alert('Une erreur est survenue : ' + error.message);
         })
         .finally(() => {
-            loader.classList.add('hidden');
+            stopLoader();
         });
 
 });
@@ -226,12 +224,9 @@ document.querySelector('#confirmModalButton').addEventListener('click', function
 
     document.getElementById("emptyListeModal").classList.add('hidden');
 
-    const loader = document.getElementById('emptyStaffLoader');
-
-    loader.classList.remove('hidden');
-
     const action = apiUrl.deleteAllStaff + activeEvent.id;
 
+    startLoader();
     fetch(action, {
         method: 'DELETE',
     })
@@ -239,18 +234,17 @@ document.querySelector('#confirmModalButton').addEventListener('click', function
 
             if (response.ok) {
                 alert('Liste vidée avec succès');
-                window.location.reload(true);
+                fetchStaffData();
             } else {
                 alert('Erreur lors de la suppression.');
             }
 
         })
         .catch(error => {
-            loader.classList.add('hidden');
             alert('Une erreur est survenue : ' + error.message);
         })
         .finally(() => {
-            loader.classList.add('hidden');
+            stopLoader();
         });
 
 });
@@ -259,17 +253,15 @@ document.querySelector('#addStaffForm').addEventListener('submit', function (eve
 
     event.preventDefault();
 
-    const loader = document.getElementById('addStaffLoader');
-
-    loader.classList.remove('hidden');
-
+    
     const formData = new FormData(this);
     formData.append("event_id", activeEvent.id);
-
+    
     const action = apiUrl.addStaff;
-
+    
     const data = Object.fromEntries(formData.entries());
-
+    
+    startLoader();
     fetch(action, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -279,18 +271,17 @@ document.querySelector('#addStaffForm').addEventListener('submit', function (eve
 
             if (response.ok) {
                 alert("Membre ajouté avec succès !");
-                window.location.reload(true);
+                fetchStaffData();
             } else {
                 alert("Erreur lors de l'ajout");
             }
 
         })
         .catch(error => {
-            loader.classList.add('hidden');
             alert('Une erreur est survenue : ' + error.message);
         })
         .finally(() => {
-            loader.classList.add('hidden');
+            stopLoader();
         });
 
 });

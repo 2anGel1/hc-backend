@@ -101,18 +101,27 @@ async function populateDeviceTable(liste = []) {
             if (device.active) {
                 action = `
                     <button type="button" onclick="toogleDevice('${device.id}', 'disable')"
-                        class="inline-flex items-center rounded bg-red-700 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                        class="inline-flex w-[90px] h-full flex justify-center items-center rounded bg-red-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-red-600">
                         Déseactiver
                     </button>
                 `
             } else {
                 action = `
                     <button type="button" onclick="toogleDevice('${device.id}')"
-                        class="inline-flex items-center rounded bg-gray-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                        class="inline-flex w-[90px] h-full flex justify-center items-center rounded bg-green-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-600">
                         Activer
                     </button>
                 `
             }
+
+            const deleteBtn = `
+            <button type="button" onclick="deleteDevice('${device.id}')" data-tooltip-target="tooltip-default"
+                class="inline-flex items-center rounded bg-gray-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+                <svg class="w-4 h-4 text-white text-xs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                </svg>
+            </button>
+        `
 
             const status = device.active ?
                 '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Actif</span>' :
@@ -122,7 +131,10 @@ async function populateDeviceTable(liste = []) {
                 <td class="px-4 py-2 text-xs border-b">${num}</td>
                 <td class="px-4 py-2 text-xs border-b">${device.id}</td>
                 <td class="px-4 py-2 font-semibold text-xs border-b">${status}</td>
-                <td class="px-4 py-2 font-semibold text-xs border-b">${action}</td>
+                <td class="px-4 py-2 font-semibold text-xs border-b flex gap-1 items-center">
+                ${action}
+                ${deleteBtn}
+                </td>
             `;
 
             tableBody.appendChild(row);
@@ -157,6 +169,8 @@ async function populateDeviceTable(liste = []) {
 
 async function toogleDevice(device_id, action = 'enable') {
 
+    startLoader();
+
     const data = {
         device_id,
         action
@@ -171,6 +185,36 @@ async function toogleDevice(device_id, action = 'enable') {
 
             if (response.ok) {
 
+                // alert(`Terminal ${action == 'enable' ? 'activé' : 'déactivé'}`);
+                fetchDevicesData();
+
+            } else {
+                alert("Une erreur ai survenue");
+            }
+
+        })
+        .catch(error => {
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            stopLoader();
+        });
+
+}
+
+async function deleteDevice(device_id,) {
+
+    startLoader();
+
+    fetch(apiUrl.removeDevice + device_id, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+    })
+        .then(response => {
+
+            if (response.ok) {
+
+                alert("Terminal supprimé");
                 fetchDevicesData();
 
             } else {
@@ -182,6 +226,9 @@ async function toogleDevice(device_id, action = 'enable') {
             loader.classList.add('hidden');
             alert('Une erreur est survenue : ' + error.message);
         })
+        .finally(() => {
+            stopLoader();
+        });
 
 }
 

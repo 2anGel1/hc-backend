@@ -141,6 +141,8 @@ async function fetchStaffZoneData(areaId) {
 
 async function associateStaffToArea(all = true, action = "associate") {
 
+    startLoader();
+
     var liste = [];
     if (action == "associate") {
         liste = all ? currentAllStaff.map(el => el.id) : Array.from(selectedStaff);
@@ -157,8 +159,6 @@ async function associateStaffToArea(all = true, action = "associate") {
     } else if (!all && action != "associate") {
         loaderId = "dissociateLoader";
     }
-    const loader = document.getElementById(loaderId);
-    loader.classList.remove('hidden');
 
     await Promise.all(
         liste.map(async (element) => {
@@ -191,19 +191,20 @@ async function associateStaffToArea(all = true, action = "associate") {
         })
     );
 
-    loader.classList.add('hidden');
-    if (loaderId == "associateLoader") {
+    if (!all && action == "associate") {
         document.getElementById('associateBtn').classList.add('hidden');
         document.getElementById('associateAllBtn').classList.remove('hidden');
     }
 
-    if (loaderId == "dissociateLoader") {
+    if (!all && action != "associate") {
         document.getElementById('dissociateBtn').classList.add('hidden');
         document.getElementById('dissociateAllBtn').classList.remove('hidden');
     }
 
     fetchAllStaffData();
     fetchStaffZoneData(activeZone.id);
+
+    stopLoader();
 
 }
 
@@ -310,7 +311,7 @@ function populateStaffZoneTable(liste = []) {
             <td class="px-4 py-2 text-xs border-b">${staff.pole}</td>
             <td class="px-4 py-2 text-xs border-b">${staff.role}</td>
         `;
-        tableBody.appendChild(row); 
+        tableBody.appendChild(row);
     });
 
     $('#zoneStaffTable').DataTable({

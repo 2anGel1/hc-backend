@@ -25,6 +25,7 @@ apiUrl = {
     addAera: '/api/admin/area/add',
 
     // terminal
+    removeDevice: '/api/admin/device/delete/',
     toogleDevice: '/api/admin/device/toogle',
     allDevice: '/api/admin/area/get-device/',
     getAreaQrcode: '/api/qr/area/get-one/',
@@ -54,6 +55,25 @@ formatHour = function (isoDate) {
     const formattedTime = `${hours}h${minutes}`;
 
     return formattedTime;
+}
+
+startLoader = function () {
+    loading();
+}
+
+stopLoader = function () {
+    loading(false);
+}
+
+function loading(load = true) {
+
+    const loader = document.getElementById('loaderModal');
+    if (load) {
+        loader.classList.remove('hidden');
+    } else {
+        loader.classList.add('hidden');
+    }
+
 }
 
 function init() {
