@@ -95,7 +95,7 @@ function init() {
 
             if (authUser) {
 
-                if (currentPage != "event.html") {
+                if (currentPage != "event.html" && currentPage != "users.html") {
 
                     const activeEventJson = localStorage.getItem("ACTIVE_EVENT");
 

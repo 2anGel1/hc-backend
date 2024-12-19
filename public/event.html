@@ -31,21 +31,44 @@
 
                 <!-- NAVBAR -->
                 <nav class="border-gray-200 border-gray-200 border-b">
-                    <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
-                        <h1 class="text-gray-800 text-3xl font-bold">
-                            Nos Évenements
-                        </h1>
-                        <button type="submit" id="addStaffButton"
-                            onclick="document.getElementById('addEventModal').classList.remove('hidden')"
-                            class="inline-flex justify-center items-center rounded bg-gray-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
-                            Nouvel évenement
+                    <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto px-4 pt-3">
+                        <div
+                            class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                            <ul class="flex flex-wrap -mb-px">
+                                <li class="me-2">
+                                    <a href="#"
+                                        class="inline-block p-4 text-[#dc1919] border-b-2 border-[#dc1919] rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+                                        aria-current="page">
+                                        Évenements
+                                    </a>
+                                </li>
+                                <li class="me-2">
+                                    <a href="/users.html"
+                                        class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                                        Utilisateurs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <button type="button" id="logoutBtn"
+                            class="inline-flex justify-center items-center rounded bg-[#dc1919] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 ">
+                            Déconnexion
                         </button>
                     </div>
                 </nav>
 
                 <!-- LISTE -->
-                <section id="events-container" class="hidden w-full flex flex-col gap-4 p-2">
-                </section>
+                <div class="flex flex-col items-center">
+                    <button type="submit" id="addStaffButton"
+                        onclick="document.getElementById('addEventModal').classList.remove('hidden')"
+                        class=" w-[80%] mx-2 mt-2 inline-flex justify-center items-center rounded bg-gray-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700">
+                        Ajouter un évenement +
+                    </button>
+                    <section id="events-container" class="hidden w-full flex flex-col gap-4 p-2">
+                    </section>
+                </div>
 
                 <!-- SKELETON -->
                 <div role="status" class="w-full animate-pulse" id="allEventsLoader">
@@ -57,6 +80,25 @@
 
             </div>
 
+        </div>
+
+        <!-- MODAL -->
+
+        <!-- LOADER -->
+        <div id="loaderModal" class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="fixed inset-0 bg-gray-500/50 transition-opacity" aria-hidden="true"></div>
+
+            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div
+                        class="relative transform overflow-hidden rounded-lg bg-transparent text-left shadow-xl transition-all">
+                        <div class="bg-black px-4 pb-4 pt-5 sm:p-6 sm:pb-4 animate-pulse-fast">
+                            <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="80" alt="loaderLogo">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ADD AREA MODAL -->

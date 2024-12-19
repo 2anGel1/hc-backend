@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles.css" rel="stylesheet">
+    <title>VIRTUS E.M</title>
+
+    <link rel="shortcut icon" href="./assets/LOGO_VIRTUS/LOGO_OFFICIEL.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- #dc1919 -->
+</head>
+
+<body class="min-h-full">
+
+    <main>
+
+        <div class="w-full min-h-full flex justify-center items-center">
+
+            <!-- LOGO -->
+            <div class="w-[50%] h-[100vh] bg-gray-800 shadow" style="
+            background-image: url('./assets/LOGO_VIRTUS/LOGO_OFFICIEL.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            "></div>
+
+            <!-- CONTENT -->
+            <div class="w-[50%] h-[100vh] bg-white shadow overflow-y-auto">
+
+                <!-- NAVBAR -->
+                <nav class="border-gray-200 border-gray-200 border-b">
+                    <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto px-4 pt-3">
+                        <div
+                            class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                            <ul class="flex flex-wrap -mb-px">
+                                <li class="me-2">
+                                    <a href="/event.html"
+                                        class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                                        Évenements
+                                    </a>
+                                </li>
+                                <li class="me-2">
+                                    <a href="#"
+                                        class="inline-block p-4 text-[#dc1919] border-b-2 border-[#dc1919] rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
+                                        aria-current="page">
+                                        Utilisateurs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <button type="button" id="logoutBtn"
+                            class="inline-flex justify-center items-center rounded bg-[#dc1919] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 ">
+                            Déconnexion
+                        </button>
+                    </div>
+                </nav>
+
+                <!-- LISTE -->
+                <div class="flex flex-col items-center">
+                    <!-- <button type="submit" id="addStaffButton"
+                        onclick="document.getElementById('addEventModal').classList.remove('hidden')"
+                        class=" w-[80%] mx-2 mt-2 inline-flex justify-center items-center rounded bg-gray-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700">
+                        Ajouter un évenement +
+                    </button>
+                    <section id="events-container" class="hidden w-full flex flex-col gap-4 p-2">
+                    </section> -->
+                    <p class="text-sm text-gray-800 font-bold m-6">En cous de développement...</p>
+                </div>
+
+                <!-- SKELETON -->
+                <!-- <div role="status" class="w-full animate-pulse" id="allEventsLoader">
+                    <div class="w-full flex flex-col gap-4 p-2">
+                        <div class="w-full h-[150px] border border-gray-200 bg-gray-200 rounded-lg shadow"></div>
+                        <div class="w-full h-[150px] border border-gray-200 bg-gray-200 rounded-lg shadow"></div>
+                    </div>
+                </div> -->
+
+            </div>
+
+        </div>
+
+        <!-- MODAL -->
+
+        <!-- LOADER -->
+        <div id="loaderModal" class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="fixed inset-0 bg-gray-500/50 transition-opacity" aria-hidden="true"></div>
+
+            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div
+                        class="relative transform overflow-hidden rounded-lg bg-transparent text-left shadow-xl transition-all">
+                        <div class="bg-black px-4 pb-4 pt-5 sm:p-6 sm:pb-4 animate-pulse-fast">
+                            <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="80" alt="loaderLogo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script src="./js/main.js"></script>
+    <!-- <script src="./js/event.js"></script> -->
+    <!-- <script src="./obfuscated/main.bundle.js"></script>
+    <script src="./obfuscated/event.bundle.js"></script> -->
+
+</body>
+
+
+</html>

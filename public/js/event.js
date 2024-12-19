@@ -107,6 +107,7 @@ async function renderEvents() {
 async function deleteEvent(id) {
     const action = apiUrl.removeEvent + id;
 
+    startLoader();
     fetch(action, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
@@ -162,6 +163,17 @@ document.querySelector('#addEventForm').addEventListener('submit', function (eve
         .finally(() => {
             loader.classList.add('hidden');
         });
+
+});
+
+document.querySelector('#logoutBtn').addEventListener('click', function (event) {
+
+    startLoader();
+
+    setTimeout(() => {
+        stopLoader();
+        window.location.href = "/login.html";
+    }, 2000);
 
 });
 
