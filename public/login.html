@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles.css" rel="stylesheet">
+    <title>VIRTUS E.M</title>
+
+    <link rel="shortcut icon" href="./assets/LOGO_VIRTUS/LOGO_OFFICIEL.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- #dc1919 -->
+</head>
+
+<body class="min-h-full">
+
+    <main>
+
+        <div class="w-full min-h-full flex justify-center items-center">
+
+            <!-- LOGO -->
+            <div class="w-[50%] h-[100vh] bg-gray-800 shadow" style="
+            background-image: url('./assets/LOGO_VIRTUS/LOGO_OFFICIEL.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            "></div>
+
+            <!-- CONTENT -->
+            <div class="w-[50%] h-[100vh] flex flex-col gap-6 justify-center items-center bg-white shadow px-[50px]">
+
+                <p class="text-2xl font-semibold">Accédez à l'espace d'administration</p>
+                <form class="w-full" id="loginForm">
+                    <div class="mb-5">
+                        <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Nom d'utilisateur
+                        </label>
+                        <input type="email" id="username" name="username" value="superAdmin@virtus"
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            placeholder="username@virtus.com" required />
+                    </div>
+                    <div class="mb-5">
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Mot de passe
+                        </label>
+                        <input type="password" id="password" name="password" value="12345678"
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            placeholder="********" required />
+                    </div>
+                    <button type="submit"
+                        class="text-white bg-black hover:bg-gray-800 font-medium rounded text-xs px-5 py-2.5 text-center w-[50%]">
+                        Se connecter
+                    </button>
+                </form>
+
+
+            </div>
+
+        </div>
+
+        <!-- MODAL -->
+
+        <!-- LOADER -->
+        <div id="loaderModal" class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="fixed inset-0 bg-gray-500/50 transition-opacity" aria-hidden="true"></div>
+
+            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div
+                        class="relative transform overflow-hidden rounded-lg bg-transparent text-left shadow-xl transition-all">
+                        <div class="bg-black px-4 pb-4 pt-5 sm:p-6 sm:pb-4 animate-pulse-fast">
+                            <img src="./assets/LOGO_VIRTUS/LOGO_FULL_WHITE.png" width="80" alt="loaderLogo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/login.js"></script>
+    <!-- <script src="./obfuscated/main.bundle.js"></script>
+    <script src="./obfuscated/login.bundle.js"></script> -->
+
+</body>
+
+
+</html>

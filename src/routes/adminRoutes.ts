@@ -19,11 +19,18 @@ import {
     addEvent,
     addStaff,
     addArea,
+    addUser,
+    login,
 } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
 
 const router = Router();
+
+//auth
+router.post("/auth/user/add", addUser);
+router.post("/auth/login", login);
+
 
 // event
 router.delete("/event/delete/:eventId", deleteEvent);

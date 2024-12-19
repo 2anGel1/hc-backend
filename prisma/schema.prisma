@@ -55,11 +55,21 @@ model Event {
 
 model Checking {
   event     Event    @relation(fields: [eventId], references: [id])
+  eventId   String   @default("abcdefgh12345")
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   success   Boolean
   device    String
   aera      String
   staff     String
-  eventId   String @default("abcdefgh12345")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  role        String   @default("admin")
+  createdAt   DateTime @default(now())
+  username    String   @unique()
+  password     String
+  fullName    String
+  accessToken String?
 }

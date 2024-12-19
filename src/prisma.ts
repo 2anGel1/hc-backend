@@ -8,3 +8,4 @@ export const DeviceModel = prisma.device;
 export const EventModel = prisma.event;
 export const StaffModel = prisma.staff;
 export const AreaModel = prisma.area;
+export const UserModel = prisma.user;

@@ -2,6 +2,10 @@ const API_URL = "https://hc-backend-p26i.onrender.com"
 // const API_URL = "http://localhost:8000"
 
 apiUrl = {
+
+    // auth
+    login: "/api/admin/auth/login",
+
     // event
     getAllEvent: "/api/admin/event/get-all",
     removeEvent: "/api/admin/event/delete/",
@@ -35,7 +39,8 @@ apiUrl = {
 
 }
 
-activeEvent = null
+activeEvent = null;
+authUser = null;
 
 formatDate = function (isoDate) {
     const date = new Date(isoDate);
@@ -81,57 +86,79 @@ function init() {
     const currentUrl = window.location.href.split("/");
     const currentPage = currentUrl[currentUrl.length - 1];
 
-    if (currentPage != "event.html") {
+    if (currentPage !== "login.html") {
 
-        const activeEventJson = localStorage.getItem("ACTIVE_EVENT");
+        const authUserJson = localStorage.getItem("AUTH_USER");
+        if (authUserJson) {
 
-        if (activeEventJson) {
+            authUser = JSON.parse(authUserJson);
 
-            activeEvent = JSON.parse(activeEventJson);
+            if (authUser) {
 
-            if (activeEvent) {
+                if (currentPage != "event.html") {
 
-                const header = document.querySelector("header");
-                header.className = "bg-white shadow";
+                    const activeEventJson = localStorage.getItem("ACTIVE_EVENT");
 
-                // Créer le div contenant l'image d'arrière-plan
-                const backgroundDiv = document.createElement("div");
-                backgroundDiv.className = "w-full h-[80px]";
-                backgroundDiv.style.backgroundImage = `url('${activeEvent.cover}')`;
-                backgroundDiv.style.backgroundSize = "contain";
+                    if (activeEventJson) {
 
-                // Créer le div pour le contenu noir
-                const blackOverlay = document.createElement("div");
-                blackOverlay.className = "w-full h-[80px] bg-black opacity-65 p-4";
+                        activeEvent = JSON.parse(activeEventJson);
 
-                // Ajouter le titre
-                const title = document.createElement("h1");
-                title.className = "text-xl text-white font-bold";
-                title.textContent = activeEvent.label;
+                        if (activeEvent) {
 
-                // Ajouter le sous-titre
-                const subtitle = document.createElement("p");
-                subtitle.className = "text-xs text-white underline font-semibold";
-                subtitle.textContent = formatDate(activeEvent.date);
+                            const header = document.querySelector("header");
+                            header.className = "bg-white shadow";
 
-                // Ajouter les éléments dans leur conteneur respectif
-                blackOverlay.appendChild(title);
-                blackOverlay.appendChild(subtitle);
-                backgroundDiv.appendChild(blackOverlay);
-                header.appendChild(backgroundDiv);
+                            // Créer le div contenant l'image d'arrière-plan
+                            const backgroundDiv = document.createElement("div");
+                            backgroundDiv.className = "w-full h-[80px]";
+                            backgroundDiv.style.backgroundImage = `url('${activeEvent.cover}')`;
+                            backgroundDiv.style.backgroundSize = "contain";
 
-                // Ajouter le header au body ou à un autre conteneur
-                // document.body.appendChild(header);
+                            // Créer le div pour le contenu noir
+                            const blackOverlay = document.createElement("div");
+                            blackOverlay.className = "w-full h-[80px] bg-black opacity-65 p-4";
+
+                            // Ajouter le titre
+                            const title = document.createElement("h1");
+                            title.className = "text-xl text-white font-bold";
+                            title.textContent = activeEvent.label;
+
+                            // Ajouter le sous-titre
+                            const subtitle = document.createElement("p");
+                            subtitle.className = "text-xs text-white underline font-semibold";
+                            subtitle.textContent = formatDate(activeEvent.date);
+
+                            // Ajouter les éléments dans leur conteneur respectif
+                            blackOverlay.appendChild(title);
+                            blackOverlay.appendChild(subtitle);
+                            backgroundDiv.appendChild(blackOverlay);
+                            header.appendChild(backgroundDiv);
+
+                            // Ajouter le header au body ou à un autre conteneur
+                            // document.body.appendChild(header);
+                        } else {
+                            window.location.href = "/event.html";
+                        }
+
+                    } else {
+                        window.location.href = "/event.html";
+                    }
+                } else {
+                    localStorage.removeItem("ACTIVE_EVENT");
+                }
+
             } else {
-                window.location.href = "/event.html";
+                window.location.href = "/login.html";
             }
 
         } else {
-            window.location.href = "/event.html";
+            window.location.href = "/login.html";
         }
+
     } else {
-        localStorage.removeItem("ACTIVE_EVENT");
+        localStorage.clear();
     }
+
 
 }
 
