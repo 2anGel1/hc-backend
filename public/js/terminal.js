@@ -1,6 +1,7 @@
 var activeZone = { label: "" };
 var allDevice = new Array();
 var allZone = new Array();
+var currentDevice = {};
 
 // GET
 
@@ -47,7 +48,8 @@ async function fetchDevicesData() {
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="px-4 py-2 text-xs border-b">#</th>
-                        <th class="px-4 py-2 text-xs border-b">Identifiant</th>
+                        <th class="px-4 py-2 text-xs border-b">Nom du terminal</th>
+                        <th class="px-4 py-2 text-xs border-b">Utilisateur</th>
                         <th class="px-4 py-2 text-xs border-b">Status</th>
                         <th class="px-4 py-2 text-xs border-b">Action</th>
                     </tr>
@@ -114,12 +116,10 @@ async function populateDeviceTable(liste = []) {
                 `
             }
 
-            const deleteBtn = `
-            <button type="button" onclick="deleteDevice('${device.id}')" data-tooltip-target="tooltip-default"
+            const showBtn = `
+            <button type="button" onclick="showDevice('${device.id}')" data-tooltip-target="tooltip-default"
                 class="inline-flex items-center rounded bg-gray-800 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-                <svg class="w-4 h-4 text-white text-xs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                </svg>
+                    Modifier
             </button>
         `
 
@@ -129,11 +129,12 @@ async function populateDeviceTable(liste = []) {
 
             row.innerHTML = `
                 <td class="px-4 py-2 text-xs border-b">${num}</td>
-                <td class="px-4 py-2 text-xs border-b">${device.id}</td>
+                <td class="px-4 py-2 font-semibold text-xs border-b">${device.name}</td>
+                <td class="px-4 py-2 font-semibold text-xs border-b">${device.person ?? '-/-'}</td>
                 <td class="px-4 py-2 font-semibold text-xs border-b">${status}</td>
                 <td class="px-4 py-2 font-semibold text-xs border-b flex gap-1 items-center">
                 ${action}
-                ${deleteBtn}
+                ${showBtn}
                 </td>
             `;
 
@@ -229,6 +230,20 @@ async function deleteDevice(device_id,) {
         .finally(() => {
             stopLoader();
         });
+
+}
+
+async function showDevice(device_id) {
+
+    currentDevice = allDevice.filter(d => d.id == device_id)[0];
+    console.log(currentDevice);
+
+    document.getElementById('deviceId').value = currentDevice.id;
+    document.getElementById('deviceName').value = currentDevice.name;
+    if (currentDevice.person)
+        document.getElementById('deviceUser').value = currentDevice.person;
+
+    document.getElementById('modalDeviceInfo').classList.remove('hidden');
 
 }
 

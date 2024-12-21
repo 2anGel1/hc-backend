@@ -163,30 +163,32 @@ async function associateStaffToArea(all = true, action = "associate") {
     await Promise.all(
         liste.map(async (element) => {
 
+            // setTimeout(async () => {
+
             const data = {
                 area_id: activeZone.id,
                 staff_id: element,
                 action: action,
             }
 
-            await fetch(apiUrl.associateStaffToArea, {
+            const request = await fetch(apiUrl.associateStaffToArea, {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
                 method: 'POST',
             })
                 .then(response => {
 
-                    if (!response.ok) {
-                        alert("Une erreur est survenue :");
-                    }
+                    // if (!response.ok) {
+                    //     alert("Une erreur est survenue :");
+                    // }
 
                 })
                 .catch(error => {
                     alert("Une erreur est survenue : " + error.message);
                 })
-                .finally(() => {
 
-                });
+
+            // }, 1000);
 
         })
     );

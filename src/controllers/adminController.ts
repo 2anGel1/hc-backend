@@ -65,15 +65,12 @@ export const login = async (req: Request, res: Response, next: Function): Promis
             });
 
             if (!user) {
-                console.log("ici 1");
-
                 return next(res.status(400).json({ message: "Nom d'utilisateur ou mot de passe incorrect" }));
             }
 
             const isPasswordValid = await bcrypt.compare(data.password, user?.password);
 
             if (!isPasswordValid) {
-                console.log("ici 2");
                 return next(res.status(400).json({ message: "Nom d'utilisateur ou mot de passe incorrect" }));
             }
 
@@ -93,7 +90,6 @@ export const login = async (req: Request, res: Response, next: Function): Promis
             }));
 
         } else {
-            console.log("ici 3");
             return next(res.status(400).json({ message: 'Les datas manquent' }));
         }
 
@@ -393,7 +389,7 @@ export const addDevice = async (req: Request, res: Response, next: Function): Pr
 
         const data = req.body;
 
-        if (data && data.device_id && data.area_id) {
+        if (data && data.device_name && data.device_id && data.area_id) {
 
             const area = await AreaModel.findUnique({
                 where: {
@@ -418,7 +414,8 @@ export const addDevice = async (req: Request, res: Response, next: Function): Pr
             await DeviceModel.create({
                 data: {
                     id: data.device_id,
-                    areaId: data.area_id
+                    areaId: data.area_id,
+                    name: data.device_name,
                 }
             });
 
@@ -762,7 +759,6 @@ export const associateStaffToArea = async (req: Request, res: Response, next: Fu
 
 
     } catch (error) {
-        console.error("Erreur lors de l'ajout des données :", error);
         return next(res.status(500).json({ message: 'Erreur interne du serveur' }));
     }
 }
@@ -847,14 +843,15 @@ export const checkStaffQrCode = async (req: Request, res: Response, next: Functi
 
             const staffArea = staff?.areas.find((sArea: any) => sArea.areaId == area?.id);
             const isPermitted = staffArea != null;
+            const deviceField = device?.person ? device?.name + " - " + device?.person : device?.name;
 
             await CheckingModel.create({
                 data: {
                     eventId: staff?.eventId,
                     staff: staff?.names!,
                     success: isPermitted,
+                    device: deviceField,
                     aera: area?.label!,
-                    device: device?.id!,
                 }
             });
 

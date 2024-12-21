@@ -11,7 +11,7 @@ async function fetchStaffData() {
 
     const table = document.querySelector('#staffTable');
     table.classList.add('hidden');
-    
+
     await fetch(apiUrl.allStaff + activeEvent.id)
         .then(async (response) => {
 
@@ -74,7 +74,6 @@ async function populateTable(liste) {
                 const imageSource = await getStaffImage();
 
                 document.getElementById("modalStaffImage").src = imageSource;
-                document.getElementById('modalStaffInfo').classList.remove('hidden');
 
                 document.getElementById('modalStaffNames').textContent = staff.names.toUpperCase();
                 document.getElementById('modalStaffId').textContent = staff.id;
@@ -83,6 +82,8 @@ async function populateTable(liste) {
 
                 if (document.getElementById('modalStaffRole'))
                     document.getElementById('modalStaffRole').textContent = staff.role;
+
+                document.getElementById('modalStaffInfo').classList.remove('hidden');
             });
 
             num += 1;
@@ -191,10 +192,10 @@ document.querySelector('#uploadStaffForm').addEventListener('submit', function (
 
     event.preventDefault();
 
-    
+
     const formData = new FormData(this);
     const action = apiUrl.uploadStaffExcel + activeEvent.id;
-    
+
     startLoader();
     fetch(action, {
         method: 'POST',
@@ -253,14 +254,14 @@ document.querySelector('#addStaffForm').addEventListener('submit', function (eve
 
     event.preventDefault();
 
-    
+
     const formData = new FormData(this);
     formData.append("event_id", activeEvent.id);
-    
+
     const action = apiUrl.addStaff;
-    
+
     const data = Object.fromEntries(formData.entries());
-    
+
     startLoader();
     fetch(action, {
         headers: { 'Content-Type': 'application/json' },

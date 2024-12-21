@@ -16,7 +16,6 @@ async function fetchAllEvents() {
             }
 
             const eventData = await response.json();
-            // console.log(eventData);
 
             currentAllEvents = eventData.map((staff) => staff);
             renderEvents();

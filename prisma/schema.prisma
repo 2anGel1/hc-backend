@@ -40,7 +40,9 @@ model Device {
   area   Area?   @relation(fields: [areaId], references: [id])
   active Boolean @default(false)
   id     String  @id
+  person String?
   areaId String?
+  name   String
 }
 
 model Event {
@@ -69,7 +71,7 @@ model User {
   role        String   @default("admin")
   createdAt   DateTime @default(now())
   username    String   @unique()
-  password     String
+  password    String
   fullName    String
   accessToken String?
 }

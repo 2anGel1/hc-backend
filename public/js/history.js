@@ -15,7 +15,7 @@ async function fetchHistoryData() {
                 <thead class="bg-gray-200">
                     <tr>
                         <th class="px-4 py-2 text-xs border-b">#</th>
-                        <th class="px-4 py-2 text-xs border-b">Id Terminal</th>
+                        <th class="px-4 py-2 text-xs border-b">Terminal</th>
                         <th class="px-4 py-2 text-xs border-b">Nom et Prénoms</th>
                         <th class="px-4 py-2 text-xs border-b">Zone </th>
                         <th class="px-4 py-2 text-xs border-b">Status</th>
