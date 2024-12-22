@@ -203,36 +203,6 @@ async function toogleDevice(device_id, action = 'enable') {
 
 }
 
-async function deleteDevice(device_id,) {
-
-    startLoader();
-
-    fetch(apiUrl.removeDevice + device_id, {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'DELETE',
-    })
-        .then(response => {
-
-            if (response.ok) {
-
-                alert("Terminal supprimé");
-                fetchDevicesData();
-
-            } else {
-                alert("Une erreur ai survenue");
-            }
-
-        })
-        .catch(error => {
-            loader.classList.add('hidden');
-            alert('Une erreur est survenue : ' + error.message);
-        })
-        .finally(() => {
-            stopLoader();
-        });
-
-}
-
 async function showDevice(device_id) {
 
     currentDevice = allDevice.filter(d => d.id == device_id)[0];
@@ -313,6 +283,30 @@ function selectActiveZone(area) {
 }
 
 // EVENT LISTENER
+
+document.querySelector('#removeDeviceBtn').addEventListener('click', function (event) {
+
+    const loader = document.getElementById('removeDeviceLoader');
+    loader.classList.remove('hidden');
+
+    fetch(apiUrl.removeDevice + currentDevice.id, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+    })
+        .then(response => {
+
+            if (!response.ok)
+                alert("Une erreur ai survenue");
+        })
+        .catch(error => {
+            loader.classList.add('hidden');
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            window.location.reload(true);
+        });
+
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchAllZoneData();
