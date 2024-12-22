@@ -30,6 +30,7 @@ apiUrl = {
 
     // terminal
     removeDevice: '/api/admin/device/delete/',
+    updateDevice: '/api/admin/device/update',
     toogleDevice: '/api/admin/device/toogle',
     allDevice: '/api/admin/area/get-device/',
     getAreaQrcode: '/api/qr/area/get-one/',

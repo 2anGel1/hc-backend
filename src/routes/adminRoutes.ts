@@ -9,6 +9,7 @@ import {
     deleteAllStaff,
     getDeviceState,
     deleteDevice,
+    updateDevice,
     getAllStaff,
     getAllAreas,
     deleteStaff,
@@ -56,6 +57,7 @@ router.post("/area/add", addArea);
 router.delete("/device/delete/:deviceId", deleteDevice);
 router.get("/device/state/:deviceId", getDeviceState);
 router.post("/device/toogle", toogleEnableDevice);
+router.post("/device/update", updateDevice);
 router.post("/device/add", addDevice);
 
 //checkings

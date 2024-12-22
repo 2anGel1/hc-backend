@@ -435,6 +435,48 @@ export const addDevice = async (req: Request, res: Response, next: Function): Pr
     }
 }
 
+// update device
+export const updateDevice = async (req: Request, res: Response, next: Function): Promise<void> => {
+    try {
+
+        const data = req.body;
+        
+        if (data && data.device_person && data.device_id) {
+
+            var device = await DeviceModel.findUnique({
+                where: {
+                    id: data.device_id
+                }
+            });
+
+            if (!device) {
+                return next(res.status(400).json({ ok: false, message: "Ce terminal n'existe pas" }));
+            }
+
+            await DeviceModel.update({
+                where: {
+                    id: data.device_id
+                },
+                data: {
+                    person: data.device_person
+                }
+            });
+
+            return next(res.status(200).json({
+                message: "Terminal mis à jour avec succès",
+            }));
+
+        } else {
+            return next(res.status(400).json({ message: 'Les datas manquent' }));
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors de l'ajout des données :", error);
+        return next(res.status(500).json({ message: 'Erreur interne du serveur' }));
+    }
+}
+
 // delete device
 export const deleteDevice = async (req: Request, res: Response, next: Function): Promise<void> => {
     try {

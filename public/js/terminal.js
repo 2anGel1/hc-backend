@@ -284,6 +284,43 @@ function selectActiveZone(area) {
 
 // EVENT LISTENER
 
+document.querySelector('#updateTerminalFrom').addEventListener('submit', function (event) {
+
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    const action = apiUrl.updateDevice;
+
+    const data = Object.fromEntries(formData.entries());
+
+    console.log(data);
+    
+    const loader = document.getElementById('updateDeviceLoader');
+    loader.classList.remove('hidden');
+
+    fetch(action, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        method: 'POST',
+    })
+        .then(response => {
+
+            if (!response.ok) {
+                alert("Erreur lors de l'ajout");
+            }
+
+        })
+        .catch(error => {
+            alert('Une erreur est survenue : ' + error.message);
+        })
+        .finally(() => {
+            loader.classList.add('hidden');
+            window.location.reload(true);
+        });
+
+});
+
 document.querySelector('#removeDeviceBtn').addEventListener('click', function (event) {
 
     const loader = document.getElementById('removeDeviceLoader');
