@@ -182,8 +182,13 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
         const staffMembers = await StaffModel.findMany({
             where: {
                 eventId: req.params.eventId,
+            }, include: {
+                areas: true
             }
         });
+
+        const allAreas = await AreaModel.findMany();
+        const allAreasId = allAreas.map((area) => { area.id, area.label });
 
         const filePath = path.join(__dirname, "../../uploads/data.csv");
 
@@ -192,12 +197,25 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
 
         // Mapping des données avec des en-têtes personnalisés
 
-        const formattedData = staffMembers.map((row) => ({
-            "NOMS": row.names,
-            "FONCTION": row.role,
-            "POLE": row.pole,
-            "QRCODE": row.id + ".png",
-        }));
+        const formattedData = staffMembers.map((row) => {
+            var theRow = {
+                "NOMS": row.names,
+                "FONCTION": row.role,
+                "POLE": row.pole,
+                "QRCODE": row.id + ".png",
+            };
+
+            allAreas.forEach((area) => {
+                const existingArea = row.areas.filter((ar) => ar.areaId == area.id);
+                theRow = {
+                    ...theRow,
+                    [`${area.label}`]: existingArea && existingArea[0] ? 1 : 0
+                }
+
+            });
+
+            return theRow;
+        });
 
         // Création du fichier CSV avec fast-csv
         const csvStream = format({ headers: true, delimiter: ";" }); // Séparateur ";"
