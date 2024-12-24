@@ -86,7 +86,7 @@ router.get("/get-one/:staffId", async (req: Request, res: Response): Promise<voi
         }
 
         // Générer le QR code en base64
-        const qrCodeBase64 = await QRCode.toDataURL(member.id);
+        const qrCodeBase64 = await QRCode.toDataURL(member.id, { width: 200 });
 
         // Renvoyer la page HTML avec le QR code
         res.status(200).json(qrCodeBase64);
@@ -273,7 +273,25 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
         worksheet.addRow(headers);
 
         // Ajouter les données
-        staffMembers.forEach(async (row) => {
+        const promises = staffMembers.map(async (row) => {
+            const qrCodePath = path.join(__dirname, "../../qrcodes", `${row.id}.png`);
+
+            // Générer le QR code si le fichier n'existe pas
+            if (!fs.existsSync(qrCodePath)) {
+                await QRCode.toFile(qrCodePath, row.id, {
+                    width: 200, // Largeur/hauteur du QR code
+                });
+            }
+
+            return {
+                row,
+                qrCodePath,
+            };
+        });
+
+        const results = await Promise.all(promises);
+
+        results.forEach(({ row, qrCodePath }) => {
             const rowData = [
                 row.names,
                 row.role,
@@ -284,26 +302,17 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
 
             const excelRow = worksheet.addRow(rowData);
 
-            // Ajouter l'image
-            const qrCodePath = path.join(__dirname, "../../qrcodes", `${row.id}.png`);
-
-            if (!fs.existsSync(qrCodePath)) {
-                try {
-                    await QRCode.toFile(qrCodePath, row.id, {
-                        // width: 500,
-                    });
-                    console.log(`QR code généré : ${qrCodePath}`);
-                } catch (error) {
-                    console.error("Erreur lors de la génération du QR code :", error);
-                }
-            }
-
+            // Ajouter le QR code dans la cellule Excel avec les bonnes dimensions
             if (fs.existsSync(qrCodePath)) {
                 const imageId = workbook.addImage({
                     filename: qrCodePath,
                     extension: "png",
                 });
                 worksheet.addImage(imageId, `D${excelRow.number}:D${excelRow.number}`);
+                // worksheet.addImage(imageId, {
+                //     tl: { col: 3, row: excelRow.number - 1 },
+                //     ext: { width: 200, height: 200 },
+                // });
             } else {
                 console.log(`Impossible d'ajouter le QR code pour ${row.names}`);
             }
