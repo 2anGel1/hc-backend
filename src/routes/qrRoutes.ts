@@ -1,6 +1,7 @@
 import { Router, Response, Request } from "express";
 import { AreaModel, StaffModel } from "../prisma";
 const { format } = require("@fast-csv/format");
+const ExcelJS = require("exceljs");
 import archiver from "archiver";
 import QRCode from "qrcode";
 import path from "path";
@@ -169,10 +170,81 @@ router.get("/generate-one/:staffId", async (req: Request, res: Response): Promis
 
 });
 
+// router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => {
+
+//     try {
+
+//         const uploadsDir = path.join(__dirname, "../../uploads");
+
+//         if (!fs.existsSync(uploadsDir)) {
+//             fs.mkdirSync(uploadsDir);
+//         }
+
+//         const staffMembers = await StaffModel.findMany({
+//             where: {
+//                 eventId: req.params.eventId,
+//             }, include: {
+//                 areas: true
+//             }
+//         });
+
+//         const allAreas = await AreaModel.findMany();
+//         const allAreasId = allAreas.map((area) => { area.id, area.label });
+
+//         const filePath = path.join(__dirname, "../../uploads/data.csv");
+
+//         const writeStream = fs.createWriteStream(filePath, { encoding: "utf8" });
+//         writeStream.write("\uFEFF");
+
+//         // Mapping des données avec des en-têtes personnalisés
+
+//         const formattedData = staffMembers.map((row) => {
+//             var theRow = {
+//                 "NOMS": row.names,
+//                 "FONCTION": row.role,
+//                 "POLE": row.pole,
+//                 "QRCODE": row.id + ".png",
+//             };
+
+//             allAreas.forEach((area) => {
+//                 const existingArea = row.areas.filter((ar) => ar.areaId == area.id);
+//                 theRow = {
+//                     ...theRow,
+//                     [`${area.label}`]: existingArea && existingArea[0] ? 1 : 0
+//                 }
+
+//             });
+
+//             return theRow;
+//         });
+
+//         // Création du fichier CSV avec fast-csv
+//         const csvStream = format({ headers: true, delimiter: ";" }); // Séparateur ";"
+//         csvStream.pipe(writeStream);
+//         formattedData.forEach((row) => csvStream.write(row));
+//         csvStream.end();
+
+//         writeStream.on("finish", () => {
+//             // Envoie le fichier au client
+//             res.download(filePath, "LISTE.csv", (err) => {
+//                 if (err) {
+//                     console.error("Erreur lors du téléchargement :", err);
+//                     res.status(500).send("Erreur lors de la génération du fichier CSV.");
+//                 }
+//                 // Supprime le fichier temporaire après téléchargement
+//                 fs.unlinkSync(filePath);
+//             });
+//         });
+//     } catch (error) {
+//         console.error("Erreur :", error);
+//         res.status(500).send("Erreur lors de la génération du fichier CSV.");
+//     }
+
+// });
+
 router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => {
 
     try {
-
         const uploadsDir = path.join(__dirname, "../../uploads");
 
         if (!fs.existsSync(uploadsDir)) {
@@ -182,61 +254,76 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
         const staffMembers = await StaffModel.findMany({
             where: {
                 eventId: req.params.eventId,
-            }, include: {
-                areas: true
-            }
+            },
+            include: {
+                areas: true,
+            },
         });
 
         const allAreas = await AreaModel.findMany();
-        const allAreasId = allAreas.map((area) => { area.id, area.label });
 
-        const filePath = path.join(__dirname, "../../uploads/data.csv");
+        const filePath = path.join(__dirname, "../../uploads/data.xlsx");
 
-        const writeStream = fs.createWriteStream(filePath, { encoding: "utf8" });
-        writeStream.write("\uFEFF");
+        // Créer un workbook et une worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Liste");
 
-        // Mapping des données avec des en-têtes personnalisés
+        // Ajouter des en-têtes
+        const headers = ["NOMS", "FONCTION", "POLE", "QRCODE", ...allAreas.map((area) => area.label)];
+        worksheet.addRow(headers);
 
-        const formattedData = staffMembers.map((row) => {
-            var theRow = {
-                "NOMS": row.names,
-                "FONCTION": row.role,
-                "POLE": row.pole,
-                "QRCODE": row.id + ".png",
-            };
+        // Ajouter les données
+        staffMembers.forEach(async (row) => {
+            const rowData = [
+                row.names,
+                row.role,
+                row.pole,
+                "", // L'image sera ajoutée ici
+                ...allAreas.map((area) => (row.areas.some((ar) => ar.areaId === area.id) ? 1 : 0)),
+            ];
 
-            allAreas.forEach((area) => {
-                const existingArea = row.areas.filter((ar) => ar.areaId == area.id);
-                theRow = {
-                    ...theRow,
-                    [`${area.label}`]: existingArea && existingArea[0] ? 1 : 0
+            const excelRow = worksheet.addRow(rowData);
+
+            // Ajouter l'image
+            const qrCodePath = path.join(__dirname, "../../qrcodes", `${row.id}.png`);
+
+            if (!fs.existsSync(qrCodePath)) {
+                try {
+                    await QRCode.toFile(qrCodePath, row.id, {
+                        // width: 500,
+                    });
+                    console.log(`QR code généré : ${qrCodePath}`);
+                } catch (error) {
+                    console.error("Erreur lors de la génération du QR code :", error);
                 }
+            }
 
-            });
-
-            return theRow;
+            if (fs.existsSync(qrCodePath)) {
+                const imageId = workbook.addImage({
+                    filename: qrCodePath,
+                    extension: "png",
+                });
+                worksheet.addImage(imageId, `D${excelRow.number}:D${excelRow.number}`);
+            } else {
+                console.log(`Impossible d'ajouter le QR code pour ${row.names}`);
+            }
         });
 
-        // Création du fichier CSV avec fast-csv
-        const csvStream = format({ headers: true, delimiter: ";" }); // Séparateur ";"
-        csvStream.pipe(writeStream);
-        formattedData.forEach((row) => csvStream.write(row));
-        csvStream.end();
+        // Sauvegarder le fichier
+        await workbook.xlsx.writeFile(filePath);
 
-        writeStream.on("finish", () => {
-            // Envoie le fichier au client
-            res.download(filePath, "LISTE.csv", (err) => {
-                if (err) {
-                    console.error("Erreur lors du téléchargement :", err);
-                    res.status(500).send("Erreur lors de la génération du fichier CSV.");
-                }
-                // Supprime le fichier temporaire après téléchargement
-                fs.unlinkSync(filePath);
-            });
+        // Envoie le fichier au client
+        res.download(filePath, "LISTE.xlsx", (err) => {
+            if (err) {
+                console.error("Erreur lors du téléchargement :", err);
+                res.status(500).send("Erreur lors de la génération du fichier Excel.");
+            }
+            // Supprime le fichier temporaire après téléchargement
+            fs.unlinkSync(filePath);
         });
     } catch (error) {
         console.error("Erreur :", error);
-        res.status(500).send("Erreur lors de la génération du fichier CSV.");
+        res.status(500).send("Erreur lors de la génération du fichier Excel.");
     }
 
 });
