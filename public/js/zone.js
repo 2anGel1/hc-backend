@@ -73,22 +73,23 @@ async function fetchAllZoneData() {
         }
     })
         .then(async (response) => {
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des données.');
-            }
+            console.log(response.text());
+            
+            // if (!response.ok) {
+            //     throw new Error('Erreur lors de la récupération des données.');
+            // }
 
             // const textResponse = await response.text();
             // console.log(textResponse);
             // const zonesData = JSON.parse(textResponse);
             // console.log(zonesData);
 
-            const zonesData = await response.json();
-            allZone = zonesData.map(z => z);
-            if (allZone.length != 0) {
-                selectActiveZone(allZone[0]);
-            }
-            renderZones();
+            // const zonesData = await response.json();
+            // allZone = zonesData.map(z => z);
+            // if (allZone.length != 0) {
+            //     selectActiveZone(allZone[0]);
+            // }
+            // renderZones();
 
         })
         .catch(error => {
