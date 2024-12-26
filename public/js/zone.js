@@ -66,8 +66,9 @@ async function fetchAllZoneData() {
 
     await fetch(apiUrl.allZone + activeEvent.id, {
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            // 'Accept': 'application/json',
+            // 'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
         }
     })
         .then(async (response) => {
@@ -90,7 +91,7 @@ async function fetchAllZoneData() {
 
         })
         .catch(error => {
-            console.error(error.message);
+            console.log(error);
             alert('Impossible de récupérer les données.');
         })
         .finally(() => {

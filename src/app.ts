@@ -1,8 +1,10 @@
 import express, { Application, Request, Response } from "express";
+const compression = require('compression');
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
+
 
 // import userRoutes from "./routes/userRoutes";
 import adminRoutes from "./routes/adminRoutes";
@@ -15,6 +17,7 @@ const app: Application = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(compression());
 
 // HTML
 app.use(express.static(path.join(__dirname, "../public")));
