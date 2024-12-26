@@ -216,6 +216,7 @@ export const handleFileUploadStaff = async (req: Request, res: Response, next: F
                     resolve();
                 })
                 .on("error", (err) => {
+                    console.log("erreur ici");
                     reject(err);
                 });
         });

@@ -189,7 +189,6 @@ router.get("/generate-one/:staffId", async (req: Request, res: Response): Promis
 //         });
 
 //         const allAreas = await AreaModel.findMany();
-//         const allAreasId = allAreas.map((area) => { area.id, area.label });
 
 //         const filePath = path.join(__dirname, "../../uploads/data.csv");
 
@@ -203,17 +202,17 @@ router.get("/generate-one/:staffId", async (req: Request, res: Response): Promis
 //                 "NOMS": row.names,
 //                 "FONCTION": row.role,
 //                 "POLE": row.pole,
-//                 "QRCODE": row.id + ".png",
+//                 "QRCODE": "/Volumes/UFO.EXTREME/HIMRA CS2/BADGE OFFICIELS/qrcodes/" + row.id + ".png",
 //             };
 
-//             allAreas.forEach((area) => {
-//                 const existingArea = row.areas.filter((ar) => ar.areaId == area.id);
-//                 theRow = {
-//                     ...theRow,
-//                     [`${area.label}`]: existingArea && existingArea[0] ? 1 : 0
-//                 }
+//             // allAreas.forEach((area) => {
+//             //     const existingArea = row.areas.filter((ar) => ar.areaId == area.id);
+//             //     theRow = {
+//             //         ...theRow,
+//             //         [`${area.label}`]: existingArea && existingArea[0] ? 1 : 0
+//             //     }
 
-//             });
+//             // });
 
 //             return theRow;
 //         });
@@ -269,7 +268,9 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
         const worksheet = workbook.addWorksheet("Liste");
 
         // Ajouter des en-têtes
-        const headers = ["NOMS", "FONCTION", "POLE", "QRCODE", ...allAreas.map((area) => area.label)];
+        const headers = ["NOMS", "FONCTION", "POLE", "QRCODE"
+            // , ...allAreas.map((area) => area.label)
+        ];
         worksheet.addRow(headers);
 
         // Ajouter les données
@@ -296,26 +297,12 @@ router.get("/download-all-csv/:eventId", async (req: Request, res: Response) => 
                 row.names,
                 row.role,
                 row.pole,
-                "", // L'image sera ajoutée ici
-                ...allAreas.map((area) => (row.areas.some((ar) => ar.areaId === area.id) ? 1 : 0)),
+                "/Volumes/UFO.EXTREME/HIMRA CS2/BADGE OFFICIELS/qrcodes/" + row.id + ".png",
+                // ...allAreas.map((area) => (row.areas.some((ar) => ar.areaId === area.id) ? 1 : 0)),
             ];
 
             const excelRow = worksheet.addRow(rowData);
 
-            // Ajouter le QR code dans la cellule Excel avec les bonnes dimensions
-            if (fs.existsSync(qrCodePath)) {
-                const imageId = workbook.addImage({
-                    filename: qrCodePath,
-                    extension: "png",
-                });
-                worksheet.addImage(imageId, `D${excelRow.number}:D${excelRow.number}`);
-                // worksheet.addImage(imageId, {
-                //     tl: { col: 3, row: excelRow.number - 1 },
-                //     ext: { width: 200, height: 200 },
-                // });
-            } else {
-                console.log(`Impossible d'ajouter le QR code pour ${row.names}`);
-            }
         });
 
         // Sauvegarder le fichier
