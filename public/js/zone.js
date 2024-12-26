@@ -67,7 +67,8 @@ async function fetchAllZoneData() {
     await fetch(apiUrl.allZone + activeEvent.id, {
         headers: {
             // 'Accept': 'application/json',
-            // 'Content-Type': 'application/json',
+            'Content-Encoding': 'gzip',
+            'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
         }
     })
