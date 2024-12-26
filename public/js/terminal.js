@@ -8,7 +8,7 @@ var currentDevice = {};
 // all zone
 async function fetchAllZoneData() {
 
-    await fetch(apiUrl.allZone + activeEvent.id)
+    await fetch(apiUrl.allZoneWithout + activeEvent.id)
 
         .then(async (response) => {
 

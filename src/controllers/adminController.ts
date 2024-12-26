@@ -679,6 +679,41 @@ export const getAllAreas = async (req: Request, res: Response, next: Function): 
     }
 }
 
+// all-area-without-people
+export const getAllAreasWithoutPeople = async (req: Request, res: Response, next: Function): Promise<void> => {
+
+    const event_id = req.params.eventId;
+
+    if (!event_id) {
+        return next(res.status(400).json({ message: "Vous devez fournir un id d'évenement" }));
+    }
+
+    const event = await EventModel.findUnique({
+        where: {
+            id: event_id
+        }
+    });
+
+    if (!event) {
+        return next(res.status(400).json({ message: "Cet évenement n'existe pas" }));
+    }
+
+    try {
+        const areas = await AreaModel.findMany({
+            where: {
+                eventId: event_id
+            },
+            include: {
+                staff: false
+            }
+        });
+        return next(res.status(200).json(areas));
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        return next(res.status(500).json({ message: 'Erreur interne du serveur' }));
+    }
+}
+
 // all staff-area
 export const getStaffOfAreaById = async (req: Request, res: Response, next: Function): Promise<void> => {
     try {

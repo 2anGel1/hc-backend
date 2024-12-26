@@ -22,6 +22,7 @@ import {
     addArea,
     addUser,
     login,
+    getAllAreasWithoutPeople,
 } from "../controllers/adminController";
 import upload from "../middlewares/upload";
 import { Router } from "express";
@@ -46,6 +47,7 @@ router.delete("/staff/delete/:staffId", deleteStaff);
 router.post("/staff/add", addStaff);
 
 // area
+router.get("/area/get-all-without/:eventId", getAllAreasWithoutPeople);
 router.get("/area/get-device/:areaId", getDevicesOfAreaById);
 router.get("/area/get-staff/:areaId", getStaffOfAreaById);
 router.post("/area/associate", associateStaffToArea);

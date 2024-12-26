@@ -22,6 +22,7 @@ apiUrl = {
     addStaff: '/api/admin/staff/add',
 
     // zone
+    allZoneWithout: '/api/admin/area/get-all-without/',
     associateStaffToArea: '/api/admin/area/associate',
     allZoneStaff: '/api/admin/area/get-staff/',
     removeAera: '/api/admin/area/delete/',
