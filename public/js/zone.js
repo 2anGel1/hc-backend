@@ -64,7 +64,7 @@ async function fetchAllStaffData() {
 // all zone
 async function fetchAllZoneData() {
 
-    await fetch(apiUrl.allZone + activeEvent.id, {
+    await fetch(apiUrl.allZoneWithout + activeEvent.id, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
