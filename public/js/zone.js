@@ -489,7 +489,7 @@ document.querySelector('#staffZoneSearch').addEventListener('input', (e) => {
 document.querySelector('#staffZoneSearchPole').addEventListener('input', (e) => {
 
     var searchParam = e.target.value.toLowerCase();
-    const newListe = allZoneStaff.filter((staff) => {
+    const newListe = searchParam == "" ? allZoneStaff : allZoneStaff.filter((staff) => {
         return (
             staff.pole.toLowerCase() == searchParam
         )
@@ -520,7 +520,7 @@ document.querySelector('#staffSearch').addEventListener('input', (e) => {
 document.querySelector('#staffSearchPole').addEventListener('input', (e) => {
 
     var searchParam = e.target.value.toLowerCase();
-    const newListe = allStaff.filter((staff) => {
+    const newListe = searchParam == "" ? allStaff :  allStaff.filter((staff) => {
         return (
             staff.pole.toLowerCase() == searchParam
         )
