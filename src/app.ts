@@ -17,7 +17,7 @@ const app: Application = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(compression());
+// app.use(compression());
 
 // HTML
 app.use(express.static(path.join(__dirname, "../public")));

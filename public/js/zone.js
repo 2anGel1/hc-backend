@@ -66,30 +66,22 @@ async function fetchAllZoneData() {
 
     await fetch(apiUrl.allZone + activeEvent.id, {
         headers: {
-            // 'Accept': 'application/json',
-            'Content-Encoding': 'gzip',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
         }
     })
         .then(async (response) => {
-            console.log(response.text());
-            
-            // if (!response.ok) {
-            //     throw new Error('Erreur lors de la récupération des données.');
-            // }
 
-            // const textResponse = await response.text();
-            // console.log(textResponse);
-            // const zonesData = JSON.parse(textResponse);
-            // console.log(zonesData);
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données.');
+            }
 
-            // const zonesData = await response.json();
-            // allZone = zonesData.map(z => z);
-            // if (allZone.length != 0) {
-            //     selectActiveZone(allZone[0]);
-            // }
-            // renderZones();
+            const zonesData = await response.json();
+            allZone = zonesData.map(z => z);
+            if (allZone.length != 0) {
+                selectActiveZone(allZone[0]);
+            }
+            renderZones();
 
         })
         .catch(error => {
