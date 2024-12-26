@@ -71,12 +71,17 @@ async function fetchAllZoneData() {
                 throw new Error('Erreur lors de la récupération des données.');
             }
 
-            const zonesData = await response.json();
-            allZone = zonesData.map(z => z);
-            if (allZone.length != 0) {
-                selectActiveZone(allZone[0]);
-            }
-            renderZones();
+            const textResponse = await response.text();
+            // console.log(textResponse);
+            const zonesData = JSON.parse(textResponse); 
+            console.log(zonesData);
+            
+            // const zonesData = await response.json();
+            // allZone = zonesData.map(z => z);
+            // if (allZone.length != 0) {
+            //     selectActiveZone(allZone[0]);
+            // }
+            // renderZones();
 
         })
         .catch(error => {
