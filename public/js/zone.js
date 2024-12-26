@@ -64,7 +64,12 @@ async function fetchAllStaffData() {
 // all zone
 async function fetchAllZoneData() {
 
-    await fetch(apiUrl.allZone + activeEvent.id)
+    await fetch(apiUrl.allZone + activeEvent.id, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+    })
         .then(async (response) => {
 
             if (!response.ok) {
@@ -73,9 +78,9 @@ async function fetchAllZoneData() {
 
             const textResponse = await response.text();
             // console.log(textResponse);
-            const zonesData = JSON.parse(textResponse); 
+            const zonesData = JSON.parse(textResponse);
             console.log(zonesData);
-            
+
             // const zonesData = await response.json();
             // allZone = zonesData.map(z => z);
             // if (allZone.length != 0) {
