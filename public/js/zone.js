@@ -477,7 +477,21 @@ document.querySelector('#staffZoneSearch').addEventListener('input', (e) => {
         return (
             staff.names.toLowerCase().includes(searchParam) ||
             staff.id.toLowerCase().includes(searchParam) ||
-            staff.pole.toLowerCase().includes(searchParam)
+            staff.role.toLowerCase().includes(searchParam)
+        )
+    });
+
+    currentAllZoneStaff = newListe.map(el => el);
+    populateStaffZoneTable(newListe);
+
+});
+
+document.querySelector('#staffZoneSearchPole').addEventListener('input', (e) => {
+
+    var searchParam = e.target.value.toLowerCase();
+    const newListe = allZoneStaff.filter((staff) => {
+        return (
+            staff.pole.toLowerCase() == searchParam
         )
     });
 
@@ -494,7 +508,21 @@ document.querySelector('#staffSearch').addEventListener('input', (e) => {
         return (
             staff.names.toLowerCase().includes(searchParam) ||
             staff.id.toLowerCase().includes(searchParam) ||
-            staff.pole.toLowerCase().includes(searchParam)
+            staff.role.toLowerCase().includes(searchParam)
+        )
+    });
+
+    currentAllStaff = newListe.map(el => el);
+    populateAllStaffTable(newListe);
+
+});
+
+document.querySelector('#staffSearchPole').addEventListener('input', (e) => {
+
+    var searchParam = e.target.value.toLowerCase();
+    const newListe = allStaff.filter((staff) => {
+        return (
+            staff.pole.toLowerCase() == searchParam
         )
     });
 
